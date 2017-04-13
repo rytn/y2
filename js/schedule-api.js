@@ -11,9 +11,7 @@ function isBetweenDates(date, min, max) {
 }
 
 function displayDateInterval(startDate, endDate) {
-    if (Object.prototype.toString.call(startDate).slice(8, -1) !== 'Date'
-        || Object.prototype.toString.call(endDate).slice(8, -1) !== 'Date' || startDate === undefined || startDate === null
-        || endDate === undefined || endDate === null) {
+    if (Object.prototype.toString.call(startDate).slice(8, -1) !== 'Date' || Object.prototype.toString.call(endDate).slice(8, -1) !== 'Date' || startDate === undefined || startDate === null || endDate === undefined || endDate === null) {
         throw new TypeError('Аргументы должны быть типа Date');
     }
 
@@ -48,3 +46,22 @@ function displayDateInterval(startDate, endDate) {
     }
 }
 
+function displayAuditoriumDateInterval(auditorium, startDate, endDate) {
+    if (Object.prototype.toString.call(auditorium).slice(8, -1) !== 'String' || auditorium === undefined || auditorium === null) {
+        throw new TypeError('Аргументы должны быть типа Date');
+    }
+
+    displayDateInterval(startDate, endDate);
+
+    var auditoriums = document.getElementsByClassName('schedule-line__auditorium');
+
+    if (auditorium !== 'любая') {
+        for (var i = 0; i < auditoriums.length; i++) {
+            if (auditoriums[i].textContent.trim().toLowerCase().indexOf(auditorium.toLowerCase()) === -1) {
+                auditoriums[i].parentNode.parentNode.parentNode.style.display = 'none';
+            } else {
+                auditoriums[i].parentNode.parentNode.parentNode.style.display = 'table';
+            }
+        }
+    }
+}

@@ -424,7 +424,7 @@
 
     updateAuditoriumsSelect();
 
-    function callDisplayDateInterval() {
+    function extractDates() {
         var dayStart = document.getElementById('startDay')
             .options[document.getElementById('startDay').selectedIndex].value;
         var monthStart = document.getElementById('startMonth')
@@ -438,8 +438,21 @@
         var yearEnd = document.getElementById('endYear')
             .options[document.getElementById('endYear').selectedIndex].value;
 
-        var startDate = new Date(yearStart + '/' + monthStart + '/' + dayStart);
-        var endDate = new Date(yearEnd + '/' + monthEnd + '/' + dayEnd);
+        return {
+            dayStart: dayStart,
+            monthStart: monthStart,
+            yearStart: yearStart,
+            dayEnd: dayEnd,
+            monthEnd: monthEnd,
+            yearEnd: yearEnd
+        };
+    }
+
+    function callDisplayDateInterval() {
+        var dates = extractDates();
+
+        var startDate = new Date(dates['yearStart'] + '/' + dates['monthStart'] + '/' + dates['dayStart']);
+        var endDate = new Date(dates['yearEnd'] + '/' + dates['monthEnd'] + '/' + dates['dayEnd']);
 
         displayDateInterval(startDate, endDate);
     }

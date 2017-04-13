@@ -11,10 +11,16 @@ function isBetweenDates(date, min, max) {
 }
 
 function displayDateInterval(startDate, endDate) {
+    if (Object.prototype.toString.call(startDate).slice(8, -1) !== 'Date'
+        || Object.prototype.toString.call(endDate).slice(8, -1) !== 'Date' || startDate === undefined || startDate === null
+        || endDate === undefined || endDate === null) {
+        throw new TypeError('Аргументы должны быть типа Date');
+    }
+
     if (startDate > endDate) {
         throw new DateIntervalError();
     }
-    
+
     var months = document.getElementsByClassName('schedule-month');
 
     for (var i = 0; i < months.length; i++) {

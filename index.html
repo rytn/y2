@@ -13,6 +13,10 @@
     <div class="container">
         <div class="edit-interface">
             <form>
+                аудитория
+                <br>
+                <select id="auditoriumSelect"></select>
+                <br>
                 <strong>расписание в заданный интервал</strong>
                 <br> начало:
                 <br>
@@ -388,6 +392,38 @@
         </div>
     </div>
     <script>
+    function updateAuditoriumsSelect() {
+        var auditoriums = document.getElementsByClassName('auditorium');
+        var select = document.getElementById('auditoriumSelect');
+        var auditoriumsArray = [];
+
+        // clear select
+        while (select.firstChild) {
+            select.removeChild(select.firstChild);
+        }
+
+        // save all unique auditoriums in array for sorting
+        for (var i = 0; i < auditoriums.length; i++) {
+            if (auditoriumsArray.indexOf(auditoriums[i].textContent.trim()) === -1) {
+                auditoriumsArray.push(auditoriums[i].textContent.trim());
+            }
+        }
+
+        auditoriumsArray.sort(function(a, b) {
+            return a.localeCompare(b);
+        });
+
+        // update select element with sorted auditoriums
+        for (var i = 0; i < auditoriumsArray.length; i++) {
+            var option = document.createElement('option');
+            option.value = auditoriumsArray[i];
+            option.innerHTML = auditoriumsArray[i];
+            select.appendChild(option);
+        }
+    }
+
+    updateAuditoriumsSelect();
+
     function callDisplayDateInterval() {
         var dayStart = document.getElementById('startDay')
             .options[document.getElementById('startDay').selectedIndex].value;

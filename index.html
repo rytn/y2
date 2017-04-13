@@ -13,12 +13,13 @@
     <div class="container">
         <div class="edit-interface">
             <form>
+                <strong>расписание в заданный интервал</strong>
+                <br>
                 аудитория
                 <br>
                 <select id="auditoriumSelect"></select>
                 <br>
-                <strong>расписание в заданный интервал</strong>
-                <br> начало:
+                начало:
                 <br>
                 <select id="startDay">
                     <option value="1">1</option>
@@ -126,7 +127,7 @@
                     <option value="2016">2016</option>
                     <option value="2017">2017</option>
                 </select>
-                <input type="button" value="показать" onclick="callDisplayDateInterval()">
+                <input type="button" value="показать" onclick="callDisplayAuditoriumDateInterval()">
             </form>
         </div>
         <div class="schedule">
@@ -453,13 +454,15 @@
         };
     }
 
-    function callDisplayDateInterval() {
+    function callDisplayAuditoriumDateInterval() {
         var dates = extractDates();
 
         var startDate = new Date(dates['yearStart'] + '/' + dates['monthStart'] + '/' + dates['dayStart']);
         var endDate = new Date(dates['yearEnd'] + '/' + dates['monthEnd'] + '/' + dates['dayEnd']);
+        var auditorium = document.getElementById('auditoriumSelect')
+            .options[document.getElementById('auditoriumSelect').selectedIndex].value;
 
-        displayDateInterval(startDate, endDate);
+        displayAuditoriumDateInterval(auditorium, startDate, endDate);
     }
     </script>
 </body>

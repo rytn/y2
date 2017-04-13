@@ -413,6 +413,11 @@
             return a.localeCompare(b);
         });
 
+        var opt = document.createElement('option');
+        opt.value = 'любая';
+        opt.innerHTML = 'любая';
+        select.appendChild(opt);
+
         // update select element with sorted auditoriums
         for (var i = 0; i < auditoriumsArray.length; i++) {
             var option = document.createElement('option');

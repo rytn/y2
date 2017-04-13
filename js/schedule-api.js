@@ -1,8 +1,20 @@
+function DateIntervalError(message) {
+    this.name = 'DateIntervalError';
+    this.message = message || 'Неправильный интервал дат';
+    this.stack = (new Error()).stack;
+}
+DateIntervalError.prototype = Object.create(Error.prototype);
+DateIntervalError.prototype.constructor = DateIntervalError;
+
 function isBetweenDates(date, min, max) {
     return date >= min && date <= max;
 }
 
 function displayDateInterval(startDate, endDate) {
+    if (startDate > endDate) {
+        throw new DateIntervalError();
+    }
+    
     var months = document.getElementsByClassName('schedule-month');
 
     for (var i = 0; i < months.length; i++) {
@@ -11,8 +23,7 @@ function displayDateInterval(startDate, endDate) {
         var currentDay = months[i].getElementsByClassName('schedule-line__datetime__date');
 
         for (var j = 0; j < currentDay.length; j++) {
-            var currentDate = new Date(months[i].id.substring(3) + months[i].id.substring(0, 3)
-                + currentDay[j].textContent.trim());
+            var currentDate = new Date(months[i].id.substring(3) + months[i].id.substring(0, 3) + currentDay[j].textContent.trim());
 
             // if current date do not fall between two dates hide the lecture
             if (!isBetweenDates(currentDate, startDate, endDate)) {

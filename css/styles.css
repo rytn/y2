@@ -1,0 +1,235 @@
+html {
+    font-family: sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.container {
+    padding: 1em;
+}
+
+.schedule {
+    max-width: 600px;
+    width: 100%;
+    margin: auto;
+}
+
+.schedule-line {
+    width: 100%;
+    margin-bottom: 0.7em;
+}
+
+.schedule-month-heading {
+    width: 100%;
+    margin: 1.5em 0 0.2em;
+    border-top: 0.2em #dc0000 solid;
+    color: #dc0000;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.1em;
+    letter-spacing: .1em;
+}
+
+.schedule-month-heading span {
+    position: relative;
+    padding: 0 1em;
+    top: -.65em;
+    left: 3.5em;
+    background-color: #fff;
+    display: inline-block;
+}
+
+@media (max-width:400px) {
+    .schedule-month span {
+        left: 2em;
+    }
+}
+
+@media (max-width:300px) {
+    .schedule-month {
+        border-top: none;
+    }
+
+    .schedule-month span {
+        padding: 0;
+        left: 0;
+    }
+}
+
+.schedule-line__datetime {
+    padding: 0 0.5em 0 0.4em;
+    width: 9%;
+    text-align: center;
+}
+
+.schedule-line__datetime__date {
+    font-size: 1em;
+    display: block;
+}
+
+.schedule-line__datetime__time {
+    font-size: 0.9em;
+}
+
+.schedule-line__lecture {
+    padding-left: 0.3em;
+    width: 64%;
+}
+
+.schedule-line__lecture__title {
+    font-size: 1.1em;
+    line-height: 1;
+}
+
+.schedule-line__lecture--past a,
+.schedule-line__lecture--past a:visited {
+    text-decoration: none;
+    color: #44b;
+}
+
+.schedule-line__lecture--past a:hover,
+.schedule-line__lecture--past a:active {
+    color: #e00;
+}
+
+.schedule-line__lecturer {
+    font-size: 0.8em;
+    margin-top: 0.4em;
+}
+
+.schedule-line__lecturer a, .schedule-line__lecturer a:visited {
+    color: #000;
+    text-decoration: none;
+}
+
+.schedule-line__lecturer a:hover, .schedule-line__lecturer a:active {
+    color: #e00;
+    text-decoration: none;
+    padding: 2px 0;
+    border-bottom: 1px #e00 dotted;
+    cursor: help;
+}
+
+.schedule-line__school {
+    text-align: left;
+    padding: 0 0.4em 0 0.3em;
+    width: 9%;
+}
+
+.schedule-line__auditorium {
+    width: 18%;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: default;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000;
+    text-align: center;
+    padding: 0.2em 0.2em;
+    border-radius: 0.2em;
+    margin-right: 0.3em;
+
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.tooltip:hover {
+    color: #e00;
+    border-bottom: 1px #e00 dotted;
+}
+
+.tooltip .tooltip--left,
+.tooltip--left .tooltiptext {
+    top: -0.3em;
+    right: 105%;
+    margin-left: -5em;
+}
+
+.tooltip .tooltip--right,
+.tooltip--right .tooltiptext {
+    font-size: 1.2em;
+    width: 19em;
+    top: -4em;
+    left: 105%;
+}
+
+.schedule-line__school .tooltip,
+.schedule-line__school .tooltiptext {
+    white-space: nowrap;
+}
+
+@media (max-width:600px) {
+    .schedule-line__datetime {
+        width: 12%;
+    }
+
+    .schedule-line__lecture {
+        width: 50%;
+    }
+
+    .schedule-line__school {
+        width: 12%;
+        padding-left: 0.6em;
+    }
+
+    .schedule-line__auditorium {
+        width: 26%;
+    }
+}
+
+@media (max-width:500px) {
+    td {
+        display: block;
+        text-align: center;
+    }
+    .schedule-line__datetime {
+        width: 3em;
+        margin: 0 auto 0.1em;
+        padding: 0;
+        font-weight: 700;
+    }
+
+    .schedule-line__lecture {
+        margin: 0 auto 0.3em;
+        width: 100%;
+        padding: 0;
+    }
+
+    .schedule-line__lecturer {
+        width: 100%;
+        margin: 0;
+    }
+
+    .schedule-line__school {
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+        padding: 0;
+    }
+
+    .schedule-line__auditorium {
+        margin: 0 auto 0.2em;
+        width: 100%;
+    }
+
+    .tooltip .tooltiptext{
+        width: 200px;
+        top: 100%;
+        left: 50%;
+        margin-left: -100px;
+        white-space: normal;
+    }
+}
+

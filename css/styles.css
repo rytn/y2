@@ -233,3 +233,34 @@ table {
     }
 }
 
+.edit-interface {
+    width: 300px;
+    position: absolute;
+}
+
+@media (max-width: 1200px) {
+    .edit-interface {
+        float: left;
+        margin-bottom: 1em;
+        position: static;
+        width: 500px;
+    }
+    .schedule {
+        clear: left;
+    }
+}
+
+@media (max-width: 500px) {
+    .edit-interface {
+        width: 280px;
+    }
+}
+
+.edit-interface form {
+    margin-bottom: 1em;
+}
+
+.edit-interface h3 {
+    margin-bottom: 0.2em;
+}
+

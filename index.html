@@ -183,6 +183,11 @@
                     <option value="2016">2016</option>
                     <option value="2017">2017</option>
                 </select>
+                <br>время:
+                <br>
+                <select id="lectureHour"></select>
+                :
+                <select id="lectureMinute"></select>
                 <br>название:
                 <br>
                 <input id="lectureTitle" type="text">
@@ -469,6 +474,7 @@
     updateAuditoriumsSelect('auditoriumSelect');
     updateAuditoriumsSelect('lectureAuditorium');
     updateSchoolsSelect();
+    fillTimeSelect();
 
     function makeArrayByClassName(className) {
         var elements = document.getElementsByClassName(className);
@@ -522,6 +528,34 @@
             var option = document.createElement('option');
             option.innerHTML = schoolsArray[i];
             select.appendChild(option);
+        }
+    }
+
+    function fillTimeSelect() {
+        var hour = document.getElementById('lectureHour');
+        var minute = document.getElementById('lectureMinute');
+
+        for (var i = 0; i < 24; i++) {
+            var option = document.createElement('option');
+            if (i > 9) {
+                option.value = i;
+                option.innerHTML = i;
+            } else {
+                option.value = '0' + i;
+                option.innerHTML = '0' + i;
+            }
+            hour.appendChild(option);
+        }
+        for (var i = 0; i < 60; i++) {
+            var option = document.createElement('option');
+            if (i > 9) {
+                option.value = i;
+                option.innerHTML = i;
+            } else {
+                option.value = '0' + i;
+                option.innerHTML = '0' + i;
+            }
+            minute.appendChild(option);
         }
     }
 

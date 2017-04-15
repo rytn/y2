@@ -196,7 +196,7 @@
                 <input id="lecturerName" type="text">
                 <br>информация о лекторе:
                 <br>
-                <input id="lecturerInfo" type="text">
+                <input id="lecturerAbout" type="text">
                 <br>школа:
                 <br>
                 <select id="lectureSchool"></select>
@@ -204,10 +204,10 @@
                 <br>
                 <select id="lectureAuditorium"></select>
                 <br>
-                <input type="button" value="добавить">
+                <input type="button" value="добавить" onclick="callAddLecture()">
             </form>
         </div>
-        <div class="schedule">
+        <div id="schedule" class="schedule">
             <h1>Доклады</h1>
             <div id="oct2016" class="schedule-month">
                 <div class="schedule-month-heading">
@@ -592,6 +592,31 @@
             .options[document.getElementById('auditoriumSelect').selectedIndex].value;
 
         displayAuditoriumDateInterval(auditorium, startDate, endDate);
+    }
+
+    function callAddLecture() {
+        var day = document.getElementById('lectureDay')
+            .options[document.getElementById('lectureDay').selectedIndex].value;
+        var month = document.getElementById('lectureMonth')
+            .options[document.getElementById('lectureMonth').selectedIndex].value;
+        var year = document.getElementById('lectureYear')
+            .options[document.getElementById('lectureYear').selectedIndex].value;
+        var hour = document.getElementById('lectureHour')
+            .options[document.getElementById('lectureHour').selectedIndex].value;
+        var minute = document.getElementById('lectureMinute')
+            .options[document.getElementById('lectureMinute').selectedIndex].value;
+        var title = document.getElementById('lectureTitle').value;
+        var lecturerName = document.getElementById('lecturerName').value;
+        var lecturerAbout = document.getElementById('lecturerAbout').value;
+        var school = document.getElementById('lectureSchool')
+            .options[document.getElementById('lectureSchool').selectedIndex].value;
+        var auditorium = document.getElementById('lectureAuditorium')
+            .options[document.getElementById('lectureAuditorium').selectedIndex].value;
+
+        var datetime = new Date(year + '/' + month + '/' + day + ' ' + hour + ':' + minute);
+        var lecturer = {name: lecturerName, about: lecturerAbout};
+
+        addLecture(datetime, title, lecturer, auditorium, school);
     }
     </script>
 </body>

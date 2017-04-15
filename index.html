@@ -236,7 +236,7 @@
                         </td>
                         <td class="schedule-line__school">
                             <div id="school0" class="tooltip tooltip--left">
-                                ШРИ
+                                <div class='school'>ШРИ</div>
                                 <span class="tooltiptext">Школа разработки интерфейсов</span>
                             </div>
                         </td>
@@ -270,15 +270,15 @@
                         </td>
                         <td class="schedule-line__school">
                             <div id="school1" class="tooltip tooltip--left">
-                                ШРИ
+                                <div class='school'>ШРИ</div>
                                 <span class="tooltiptext">Школа разработки интерфейсов</span>
                             </div>
                             <div id="school2" class="tooltip tooltip--left">
-                                ШМД
+                                <div class='school'>ШМД</div>
                                 <span class="tooltiptext">Школа мобильного дизайна</span>
                             </div>
                             <div id="school3" class="tooltip tooltip--left">
-                                ШМР
+                                <div class='school'>ШМР</div>
                                 <span class="tooltiptext">Школа мобильной разработки</span>
                             </div>
                         </td>
@@ -309,7 +309,7 @@
                             </td>
                             <td class="schedule-line__school">
                                 <div id="school4" class="tooltip tooltip--left">
-                                    ШРИ
+                                    <div class='school'>ШРИ</div>
                                     <span class="tooltiptext">Школа разработки интерфейсов</span>
                                 </div>
                             </td>
@@ -346,7 +346,7 @@
                         </td>
                         <td class="schedule-line__school">
                             <div id="school5" class="tooltip tooltip--left">
-                                ШРИ
+                                <div class='school'>ШРИ</div>
                                 <span class="tooltiptext">Школа разработки интерфейсов</span>
                             </div>
                         </td>
@@ -376,7 +376,7 @@
                         </td>
                         <td class="schedule-line__school">
                             <div id="school6" class="tooltip tooltip--left">
-                                ШМД
+                                <div class='school'>ШМД</div>
                                 <span class="tooltiptext">Школа мобильного дизайна</span>
                             </div>
                         </td>
@@ -413,15 +413,15 @@
                         </td>
                         <td class="schedule-line__school">
                             <div id="school7" class="tooltip tooltip--left">
-                                ШРИ
+                                <div class='school'>ШРИ</div>
                                 <span class="tooltiptext">Школа разработки интерфейсов</span>
                             </div>
                             <div id="school8" class="tooltip tooltip--left">
-                                ШМД
+                                <div class='school'>ШМД</div>
                                 <span class="tooltiptext">Школа мобильного дизайна</span>
                             </div>
                             <div id="school9" class="tooltip tooltip--left">
-                                ШМР
+                                <div class='school'>ШМР</div>
                                 <span class="tooltiptext">Школа мобильной разработки</span>
                             </div>
                         </td>
@@ -454,7 +454,7 @@
                         </td>
                         <td class="schedule-line__school">
                             <div id="school10" class="tooltip tooltip--left">
-                                ШМР
+                                <div class='school'>ШМР</div>
                                 <span class="tooltiptext">Школа мобильной разработки</span>
                             </div>
                         </td>
@@ -466,6 +466,8 @@
     </div>
     <script>
     gatherDates();
+    updateAuditoriumsSelect();
+    updateSchoolsSelect();
 
     function makeArrayByClassName(className) {
         var elements = document.getElementsByClassName(className);
@@ -505,7 +507,20 @@
         }
     }
 
-    updateAuditoriumsSelect();
+    function updateSchoolsSelect() {
+        var select = document.getElementById('lectureSchool');
+        var schoolsArray = makeArrayByClassName('school');
+
+        while (select.firstChild) {
+            select.removeChild(select.firstChild);
+        }
+
+        for (var i = 0; i < schoolsArray.length; i++) {
+            var option = document.createElement('option');
+            option.innerHTML = schoolsArray[i];
+            select.appendChild(option);
+        }
+    }
 
     function extractDates() {
         var dayStart = document.getElementById('startDay')

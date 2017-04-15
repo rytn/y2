@@ -1,6 +1,12 @@
 // for converting words from schedule-month's ids to ordinal number of month
 var MONTHSNAMES = {"jan": "1", "feb": "2", "mar": "3", "apr": "4", "may": "5", "jun": "6", "jul": "7",
                    "aug": "8", "sep": "9", "oct": "10", "nov": "11", "dec": "12"};
+// for convertin month's ordinal number to word for schedule-month's id
+var MONTHSIDS = {"1": "jan", "2": "feb", "3": "mar", "4": "apr", "5": "may", "6": "jun", "7": "jul",
+              "8": "aug", "9": "sep", "10": "oct", "11": "nov", "12": "dec"};
+// months in russian
+var MONTHSRUS = {"1": "январь", "2": "февраль", "3": "март", "4": "апрель", "5": "май", "6": "июнь", "7": "июль",
+              "8": "август", "9": "сентябрь", "10": "октябрь", "11": "ноябрь", "12": "декабрь"};
 
 var loadByDate = [];
 
@@ -173,4 +179,94 @@ function getSchoolTip(schoolName) {
         return 'Школа мобильного дизайна';
     }
     return 'Школа';
+}
+
+function addLecture(datetime, title, lecturer, auditorium, schoolName) {
+    var school = {name: schoolName, tip: getSchoolTip(schoolName)};
+
+    if (!checkLecture(datetime, auditorium, schoolName)) {
+        throw new Error('Ошибка! Эта лекция не может быть проведена. Еще раз проверьте' +
+            'время, место проведения и лектора.');
+    }
+
+    var monthId = document.getElementById(MONTHSIDS[datetime.getMonth() + 1] + datetime.getFullYear());
+
+    // if there is no such month create a new schedule-month element
+    if (monthId === null) {
+        var divMonth = createNewElement('div', 'schedule-month', '');
+        divMonth.id = MONTHSIDS[datetime.getMonth() + 1] + datetime.getFullYear();
+
+        var divMonthHeading = createNewElement('div', 'schedule-month-heading', '');
+        var spanMonth = createNewElement('span', '', MONTHSRUS[datetime.getMonth() + 1] + ' ' + datetime.getFullYear());
+        divMonthHeading.appendChild(spanMonth);
+        divMonth.appendChild(divMonthHeading);
+
+        monthId = divMonth;
+        document.getElementById('schedule').appendChild(monthId);
+    }
+
+    // create new schedule-line
+    var tableLecture = createNewElement('table', 'schedule-line', '');
+    var tbLecutre = document.createElement('tbody');
+    var trLecture = document.createElement('tr');
+
+    var tdDateTime = createNewElement('td', 'schedule-line__datetime', '');
+    var spanDate = createNewElement('span', 'schedule-line__datetime__date', datetime.getDate());
+    var spanHour = createNewElement('span', 'schedule-line__datetime__time',
+        plusZero(datetime.getHours()) + ':' + plusZero(datetime.getMinutes()));
+    tdDateTime.appendChild(spanDate);
+    tdDateTime.appendChild(spanHour);
+    trLecture.appendChild(tdDateTime);
+
+    // if lecture is already past mark it
+    var lecture = createNewElement('td', 'schedule-line__lecture', '');
+    if (datetime < new Date()) {
+        lecture.className += ' schedule-line__lecture--past';
+    }
+    var divTitle = createNewElement('div', 'schedule-line__title', '');
+    if (datetime < new Date()) {
+        var aTitle = createNewElement('a', '', title);
+        aTitle.href = '#';
+        divTitle.appendChild(aTitle);
+    } else {
+        divTitle.innerHTML = title;
+    }
+    var divLecturer = createNewElement('div', 'schedule-line__lecturer', '');
+    var divTooltip = createNewElement('div', 'tooltip tooltip--right', lecturer.name);
+    var spanTooltip = createNewElement('span', 'tooltiptext', lecturer.about);
+    divTooltip.appendChild(spanTooltip);
+    divLecturer.appendChild(divTooltip);
+    lecture.appendChild(divTitle);
+    lecture.appendChild(divLecturer);
+
+    var tdAuditorium = createNewElement('td', 'schedule-line__auditorium', '');
+    var divATooltip = createNewElement('div', 'tooltip tooltip--left', '');
+    var divA = createNewElement('div', 'auditorium', auditorium);
+    var spanATooltip = createNewElement('span', 'tooltiptext', 'Аудитория');
+    divATooltip.appendChild(divA);
+    divATooltip.appendChild(spanATooltip);
+    tdAuditorium.appendChild(divATooltip);
+
+    var tdSchool = createNewElement('td', 'schedule-line__school', '');
+    var divSTooltip = createNewElement('div', 'tooltip tooltip--left', school.name);
+    var spanSTooltip = createNewElement('span', 'tooltiptext', school.tip);
+    divSTooltip.appendChild(spanSTooltip);
+    tdSchool.appendChild(divSTooltip);
+
+    tableLecture.appendChild(tbLecutre);
+    tbLecutre.appendChild(trLecture);
+    trLecture.appendChild(tdDateTime);
+    trLecture.appendChild(lecture);
+    trLecture.appendChild(tdAuditorium);
+    trLecture.appendChild(tdSchool);
+
+    // insert lecture at the end
+    monthId.appendChild(tableLecture);
+
+    // sort lectures by date after inserting
+    sortTables(monthId);
+
+    // add new lecture to auditoriums load
+    var newLoad = {date: datetime, auditorium: auditorium, school: schoolName};
+    loadByDate.push(newLoad);
 }

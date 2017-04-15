@@ -163,3 +163,14 @@ function plusZero(value) {
         return value;
     }
 }
+
+function getSchoolTip(schoolName) {
+    if (schoolName === 'ШРИ') {
+        return 'Школа разработки интерфейсов';
+    } else if (schoolName === 'ШМР') {
+        return 'Школа мобильной разработки';
+    } else if (schoolName === 'ШМД') {
+        return 'Школа мобильного дизайна';
+    }
+    return 'Школа';
+}

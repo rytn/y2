@@ -466,7 +466,8 @@
     </div>
     <script>
     gatherDates();
-    updateAuditoriumsSelect();
+    updateAuditoriumsSelect('auditoriumSelect');
+    updateAuditoriumsSelect('lectureAuditorium');
     updateSchoolsSelect();
 
     function makeArrayByClassName(className) {
@@ -480,8 +481,8 @@
         return array;
     }
 
-    function updateAuditoriumsSelect() {
-        var select = document.getElementById('auditoriumSelect');
+    function updateAuditoriumsSelect(selectId) {
+        var select = document.getElementById(selectId);
         var auditoriumsArray = makeArrayByClassName('auditorium');
 
         // clear select
@@ -493,10 +494,12 @@
             return a.localeCompare(b);
         });
 
-        var opt = document.createElement('option');
-        opt.value = 'любая';
-        opt.innerHTML = 'любая';
-        select.appendChild(opt);
+        if (selectId === 'auditoriumSelect') {
+            var opt = document.createElement('option');
+            opt.value = 'любая';
+            opt.innerHTML = 'любая';
+            select.appendChild(opt);
+        }
 
         // update select element with sorted auditoriums
         for (var i = 0; i < auditoriumsArray.length; i++) {

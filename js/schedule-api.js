@@ -154,3 +154,12 @@ function createNewElement(tag, className, innerHtml) {
 
     return element;
 }
+
+
+function plusZero(value) {
+    if(value < 10) {
+        return '0' + value;
+    } else {
+        return value;
+    }
+}

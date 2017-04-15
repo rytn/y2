@@ -146,3 +146,11 @@ function checkLecture(datetime, auditorium, schoolName) {
 
     return true;
 }
+
+function createNewElement(tag, className, innerHtml) {
+    var element = document.createElement(tag);
+    element.className += ' ' + className;
+    element.innerHTML = innerHtml;
+
+    return element;
+}

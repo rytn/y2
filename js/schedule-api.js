@@ -1,12 +1,48 @@
 // for converting words from schedule-month's ids to ordinal number of month
-var MONTHSNAMES = {"jan": "1", "feb": "2", "mar": "3", "apr": "4", "may": "5", "jun": "6", "jul": "7",
-                   "aug": "8", "sep": "9", "oct": "10", "nov": "11", "dec": "12"};
+var MONTHSNAMES = {
+    "jan": "1",
+    "feb": "2",
+    "mar": "3",
+    "apr": "4",
+    "may": "5",
+    "jun": "6",
+    "jul": "7",
+    "aug": "8",
+    "sep": "9",
+    "oct": "10",
+    "nov": "11",
+    "dec": "12"
+};
 // for convertin month's ordinal number to word for schedule-month's id
-var MONTHSIDS = {"1": "jan", "2": "feb", "3": "mar", "4": "apr", "5": "may", "6": "jun", "7": "jul",
-              "8": "aug", "9": "sep", "10": "oct", "11": "nov", "12": "dec"};
+var MONTHSIDS = {
+    "1": "jan",
+    "2": "feb",
+    "3": "mar",
+    "4": "apr",
+    "5": "may",
+    "6": "jun",
+    "7": "jul",
+    "8": "aug",
+    "9": "sep",
+    "10": "oct",
+    "11": "nov",
+    "12": "dec"
+};
 // months in russian
-var MONTHSRUS = {"1": "январь", "2": "февраль", "3": "март", "4": "апрель", "5": "май", "6": "июнь", "7": "июль",
-              "8": "август", "9": "сентябрь", "10": "октябрь", "11": "ноябрь", "12": "декабрь"};
+var MONTHSRUS = {
+    "1": "январь",
+    "2": "февраль",
+    "3": "март",
+    "4": "апрель",
+    "5": "май",
+    "6": "июнь",
+    "7": "июль",
+    "8": "август",
+    "9": "сентябрь",
+    "10": "октябрь",
+    "11": "ноябрь",
+    "12": "декабрь"
+};
 
 var loadByDate = [];
 
@@ -29,7 +65,7 @@ function gatherDates() {
             var school = days[j].parentNode.parentNode.parentNode.parentNode
                 .getElementsByClassName('schedule-line__school')[0].textContent.trim();
 
-            var newDate = {date: date, auditorium: auditorium, school: school};
+            var newDate = { date: date, auditorium: auditorium, school: school };
             loadByDate.push(newDate);
         }
     }
@@ -111,20 +147,20 @@ function sortTables(scheduleMonth) {
 
     // sort lectures by date
     lectureTables.sort(function(a, b) {
-       var day1 = a.getElementsByClassName('schedule-line__datetime__date')[0].textContent;
-       var hour1 = a.getElementsByClassName('schedule-line__datetime__time')[0].textContent;
-       var date1 = new Date(year + '/' + month + '/' + day1 + ' ' + hour1);
-       var day2 = b.getElementsByClassName('schedule-line__datetime__date')[0].textContent;
-       var hour2 = b.getElementsByClassName('schedule-line__datetime__time')[0].textContent;
-       var date2 = new Date(year + '/' + month + '/' + day2 + ' ' + hour2);
+        var day1 = a.getElementsByClassName('schedule-line__datetime__date')[0].textContent;
+        var hour1 = a.getElementsByClassName('schedule-line__datetime__time')[0].textContent;
+        var date1 = new Date(year + '/' + month + '/' + day1 + ' ' + hour1);
+        var day2 = b.getElementsByClassName('schedule-line__datetime__date')[0].textContent;
+        var hour2 = b.getElementsByClassName('schedule-line__datetime__time')[0].textContent;
+        var date2 = new Date(year + '/' + month + '/' + day2 + ' ' + hour2);
 
-       if (date1 > date2) {
-           return 1;
-       } else if (date2 > date1) {
-           return -1;
-       }
+        if (date1 > date2) {
+            return 1;
+        } else if (date2 > date1) {
+            return -1;
+        }
 
-       return 0;
+        return 0;
     });
 
     // clear scheduleMonth
@@ -144,8 +180,7 @@ function checkLecture(datetime, auditorium, schoolName) {
 
         // if two lectures in one auditorium at the same time
         // or if two lectures for one school at the same time
-        if ((diffHours > -2.5 && diffHours < 2.5) && (loadByDate[i].auditorium.indexOf(auditorium) !== -1
-            || loadByDate[i].school.indexOf(schoolName) !== -1)) {
+        if ((diffHours > -2.5 && diffHours < 2.5) && (loadByDate[i].auditorium.indexOf(auditorium) !== -1 || loadByDate[i].school.indexOf(schoolName) !== -1)) {
             return false;
         }
     }
@@ -163,7 +198,7 @@ function createNewElement(tag, className, innerHtml) {
 
 
 function plusZero(value) {
-    if(value < 10) {
+    if (value < 10) {
         return '0' + value;
     } else {
         return value;
@@ -182,7 +217,8 @@ function getSchoolTip(schoolName) {
 }
 
 function addLecture(datetime, title, lecturer, auditorium, schoolName) {
-    var school = {name: schoolName, tip: getSchoolTip(schoolName)};
+    var newMonth = false;
+    var school = { name: schoolName, tip: getSchoolTip(schoolName) };
 
     if (!checkLecture(datetime, auditorium, schoolName)) {
         throw new Error('Ошибка! Эта лекция не может быть проведена. Еще раз проверьте' +
@@ -203,6 +239,7 @@ function addLecture(datetime, title, lecturer, auditorium, schoolName) {
 
         monthId = divMonth;
         document.getElementById('schedule').appendChild(monthId);
+        newMonth = true;
     }
 
     // create new schedule-line
@@ -266,7 +303,46 @@ function addLecture(datetime, title, lecturer, auditorium, schoolName) {
     // sort lectures by date after inserting
     sortTables(monthId);
 
+    // if month is new sort months
+    if (newMonth) {
+        sortMonths();
+    }
+
     // add new lecture to auditoriums load
-    var newLoad = {date: datetime, auditorium: auditorium, school: schoolName};
+    var newLoad = { date: datetime, auditorium: auditorium, school: schoolName };
     loadByDate.push(newLoad);
+}
+
+function sortMonths() {
+    var months = Array.prototype.slice.call(document.getElementsByClassName('schedule-month'));
+
+    months.sort(function(a, b) {
+        var year1 = a.id.substring(3);
+        var month1 = MONTHSNAMES[a.id.substring(0, 3)];
+        var year2 = b.id.substring(3);
+        var month2 = MONTHSNAMES[b.id.substring(0, 3)];
+
+
+        var date1 = new Date(year1 + '/' + month1 + '/' + 1);
+        var date2 = new Date(year2 + '/' + month2 + '/' + 1);
+
+        if (date1 > date2) {
+            return 1;
+        } else if (date2 > date1) {
+            return -1;
+        }
+
+        return 0;
+    });
+
+    var schedule = document.getElementById('schedule');
+
+    // clear schedule
+    for (var i = schedule.children.length - 1; i > 0; i--) {
+        schedule.removeChild(schedule.lastElementChild);
+    }
+    // append sorted months to schedule
+    for (var i = 0; i < months.length; i++) {
+        schedule.appendChild(months[i]);
+    }
 }

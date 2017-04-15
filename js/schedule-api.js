@@ -2,6 +2,33 @@
 var MONTHSNAMES = {"jan": "1", "feb": "2", "mar": "3", "apr": "4", "may": "5", "jun": "6", "jul": "7",
                    "aug": "8", "sep": "9", "oct": "10", "nov": "11", "dec": "12"};
 
+var loadByDate = [];
+
+function gatherDates() {
+    var months = document.getElementsByClassName('schedule-month');
+
+    for (var i = 0; i < months.length; i++) {
+        var month = months[i].id.substring(0, 3);
+        var year = months[i].id.substring(3);
+        var days = months[i].getElementsByClassName('schedule-line__datetime__date');
+        var hours = months[i].getElementsByClassName('schedule-line__datetime__time');
+
+        for (var j = 0; j < days.length; j++) {
+            var day = days[j].textContent;
+            var hour = hours[j].textContent;
+
+            var date = new Date(year + '/' + month + '/' + day + ' ' + hour);
+            var auditorium = days[j].parentNode.parentNode.parentNode.parentNode
+                .getElementsByClassName('auditorium')[0].textContent.trim();
+            var school = days[j].parentNode.parentNode.parentNode.parentNode
+                .getElementsByClassName('schedule-line__school')[0].textContent.trim();
+
+            var newDate = {date: date, auditorium: auditorium, school: school};
+            loadByDate.push(newDate);
+        }
+    }
+}
+
 function DateIntervalError(message) {
     this.name = 'DateIntervalError';
     this.message = message || 'Неправильный интервал дат';

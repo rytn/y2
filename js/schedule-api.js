@@ -130,3 +130,19 @@ function sortTables(scheduleMonth) {
         scheduleMonth.appendChild(lectureTables[i]);
     }
 }
+
+function checkLecture(datetime, auditorium, schoolName) {
+    for (var i = 0; i < loadByDate.length; i++) {
+        // ms to hours
+        var diffHours = (datetime - loadByDate[i].date) / 36e5;
+
+        // if two lectures in one auditorium at the same time
+        // or if two lectures for one school at the same time
+        if ((diffHours > -2.5 && diffHours < 2.5) && (loadByDate[i].auditorium.indexOf(auditorium) !== -1
+            || loadByDate[i].school.indexOf(schoolName) !== -1)) {
+            return false;
+        }
+    }
+
+    return true;
+}

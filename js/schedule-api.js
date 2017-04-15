@@ -1,3 +1,7 @@
+// for converting words from schedule-month's ids to ordinal number of month
+var MONTHSNAMES = {"jan": "1", "feb": "2", "mar": "3", "apr": "4", "may": "5", "jun": "6", "jul": "7",
+                   "aug": "8", "sep": "9", "oct": "10", "nov": "11", "dec": "12"};
+
 function DateIntervalError(message) {
     this.name = 'DateIntervalError';
     this.message = message || 'Неправильный интервал дат';
@@ -63,5 +67,39 @@ function displayAuditoriumDateInterval(auditorium, startDate, endDate) {
                 auditoriums[i].parentNode.parentNode.parentNode.style.display = 'table';
             }
         }
+    }
+}
+
+
+function sortTables(scheduleMonth) {
+    var month = MONTHSNAMES[scheduleMonth.id.substring(0, 3)];
+    var year = scheduleMonth.id.substring(3);
+    var lectureTables = Array.prototype.slice.call(scheduleMonth.children, 1);
+
+    // sort lectures by date
+    lectureTables.sort(function(a, b) {
+       var day1 = a.getElementsByClassName('schedule-line__datetime__date')[0].textContent;
+       var hour1 = a.getElementsByClassName('schedule-line__datetime__time')[0].textContent;
+       var date1 = new Date(year + '/' + month + '/' + day1 + ' ' + hour1);
+       var day2 = b.getElementsByClassName('schedule-line__datetime__date')[0].textContent;
+       var hour2 = b.getElementsByClassName('schedule-line__datetime__time')[0].textContent;
+       var date2 = new Date(year + '/' + month + '/' + day2 + ' ' + hour2);
+
+       if (date1 > date2) {
+           return 1;
+       } else if (date2 > date1) {
+           return -1;
+       }
+
+       return 0;
+    });
+
+    // clear scheduleMonth
+    for (var i = scheduleMonth.children.length - 1; i > 0; i--) {
+        scheduleMonth.removeChild(scheduleMonth.lastElementChild);
+    }
+    // append sorted lectures to scheduleMonth
+    for (var i = 0; i < lectureTables.length; i++) {
+        scheduleMonth.appendChild(lectureTables[i]);
     }
 }

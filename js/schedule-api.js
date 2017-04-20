@@ -184,19 +184,24 @@ function sortTables(scheduleMonth) {
     }
 }
 
-function checkLecture(datetime, auditorium, school) {
+function checkLecture(datetime, auditorium, school, lecturer) {
     for (var i = 0; i < schedule.length; i++) {
         // ms to hours
         var diffHours = (datetime - schedule[i].date) / 36e5;
 
         // if two lectures in one auditorium at the same time
-        // or if two lectures for one school at the same time
-        if ((diffHours > -2.5 && diffHours < 2.5) && (schedule[i].auditorium.indexOf(auditorium) !== -1 || schedule[i].school.indexOf(school) !== -1)) {
-            return false;
+        // or if two lectures for one school
+        // or if two lecturers for one lecture
+        if ((diffHours > -2.5 && diffHours < 2.5) && schedule[i].auditorium.indexOf(auditorium) !== -1) {
+            throw new Error('В этой аудитории уже идет лекция в это время.');
+        }
+        if ((diffHours > -2.5 && diffHours < 2.5) && schedule[i].school.indexOf(school) !== -1) {
+            throw new Error('Для этой школы уже читается лекция в это время.');
+        }
+        if ((diffHours > -2.5 && diffHours < 2.5) && schedule[i].lecturer.name.indexOf(lecturer) !== -1) {
+            throw new Error('Этот лектор уже читает лекцию в это время.');
         }
     }
-
-    return true;
 }
 
 function createNewElement(tag, className, innerHtml) {
@@ -230,10 +235,7 @@ function getSchoolTip(school) {
 function addLecture(datetime, title, lecturer, auditorium, school) {
     var newMonth = false;
 
-    if (!checkLecture(datetime, auditorium, school)) {
-        throw new Error('Ошибка! Эта лекция не может быть проведена. Еще раз проверьте' +
-            'время, место проведения и лектора.');
-    }
+    checkLecture(datetime, auditorium, school, lecturer.name);
 
     var monthId = document.getElementById(MONTHSIDS[datetime.getMonth() + 1] + datetime.getFullYear());
 

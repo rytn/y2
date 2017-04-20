@@ -184,14 +184,14 @@ function sortTables(scheduleMonth) {
     }
 }
 
-function checkLecture(datetime, auditorium, schoolName) {
+function checkLecture(datetime, auditorium, school) {
     for (var i = 0; i < schedule.length; i++) {
         // ms to hours
         var diffHours = (datetime - schedule[i].date) / 36e5;
 
         // if two lectures in one auditorium at the same time
         // or if two lectures for one school at the same time
-        if ((diffHours > -2.5 && diffHours < 2.5) && (schedule[i].auditorium.indexOf(auditorium) !== -1 || schedule[i].school.indexOf(schoolName) !== -1)) {
+        if ((diffHours > -2.5 && diffHours < 2.5) && (schedule[i].auditorium.indexOf(auditorium) !== -1 || schedule[i].school.indexOf(school) !== -1)) {
             return false;
         }
     }
@@ -216,22 +216,21 @@ function plusZero(value) {
     }
 }
 
-function getSchoolTip(schoolName) {
-    if (schoolName === 'ШРИ') {
+function getSchoolTip(school) {
+    if (school === 'ШРИ') {
         return 'Школа разработки интерфейсов';
-    } else if (schoolName === 'ШМР') {
+    } else if (school === 'ШМР') {
         return 'Школа мобильной разработки';
-    } else if (schoolName === 'ШМД') {
+    } else if (school === 'ШМД') {
         return 'Школа мобильного дизайна';
     }
     return 'Школа';
 }
 
-function addLecture(datetime, title, lecturer, auditorium, schoolName) {
+function addLecture(datetime, title, lecturer, auditorium, school) {
     var newMonth = false;
-    var school = { name: schoolName, tip: getSchoolTip(schoolName) };
 
-    if (!checkLecture(datetime, auditorium, schoolName)) {
+    if (!checkLecture(datetime, auditorium, school)) {
         throw new Error('Ошибка! Эта лекция не может быть проведена. Еще раз проверьте' +
             'время, место проведения и лектора.');
     }
@@ -296,8 +295,8 @@ function addLecture(datetime, title, lecturer, auditorium, schoolName) {
     tdAuditorium.appendChild(divATooltip);
 
     var tdSchool = createNewElement('td', 'schedule-line__school', '');
-    var divSTooltip = createNewElement('div', 'tooltip tooltip--left', school.name);
-    var spanSTooltip = createNewElement('span', 'tooltiptext', school.tip);
+    var divSTooltip = createNewElement('div', 'tooltip tooltip--left', school);
+    var spanSTooltip = createNewElement('span', 'tooltiptext', getSchoolTip(school));
     divSTooltip.appendChild(spanSTooltip);
     tdSchool.appendChild(divSTooltip);
 

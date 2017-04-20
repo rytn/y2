@@ -272,7 +272,7 @@ function addLecture(datetime, title, lecturer, auditorium, school) {
     if (datetime < new Date()) {
         lecture.className += ' schedule-line__lecture--past';
     }
-    var divTitle = createNewElement('div', 'schedule-line__title', '');
+    var divTitle = createNewElement('div', 'schedule-line__lecture__title', '');
     if (datetime < new Date()) {
         var aTitle = createNewElement('a', '', title);
         aTitle.href = '#';
@@ -324,6 +324,8 @@ function addLecture(datetime, title, lecturer, auditorium, school) {
     var newLecture = {date: datetime, title: title, lecturer: {name: lecturer.name, about: lecturer.about},
         auditorium: auditorium, school: school};
     schedule.push(newLecture);
+
+    localStorage.setItem(datetime.getTime().toString() + auditorium, JSON.stringify(newLecture));
 }
 
 function sortMonths() {

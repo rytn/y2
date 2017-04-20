@@ -470,6 +470,14 @@
         </div>
     </div>
     <script>
+    if (localStorage.length !== 0) {
+        for (var i = 0; i < localStorage.length; i++) {
+            var lecture = JSON.parse(localStorage.getItem(localStorage.key(i)));
+
+            addLecture(new Date(lecture.date), lecture.title, lecture.lecturer, lecture.auditorium, lecture.school);
+        }
+    }
+    
     gatherDates();
     updateAuditoriumsSelect('auditoriumSelect');
     updateAuditoriumsSelect('lectureAuditorium');

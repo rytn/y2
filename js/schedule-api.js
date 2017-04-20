@@ -44,7 +44,7 @@ var MONTHSRUS = {
     "12": "декабрь"
 };
 
-var loadByDate = [];
+var schedule = [];
 
 function gatherDates() {
     var months = document.getElementsByClassName('schedule-month');
@@ -58,15 +58,26 @@ function gatherDates() {
         for (var j = 0; j < days.length; j++) {
             var day = days[j].textContent;
             var hour = hours[j].textContent;
-
             var date = new Date(year + '/' + month + '/' + day + ' ' + hour);
+            var title = months[i].getElementsByClassName('schedule-line__lecture__title')[j].textContent.trim();
+
+            var lecturerDiv = months[i].getElementsByClassName('tooltip tooltip--right');
+            var name = lecturerDiv[0].innerHTML.substring(0, lecturerDiv[0].innerHTML.indexOf('<')).trim();
+            var about = lecturerDiv[0].innerHTML.substring(lecturerDiv[0].innerHTML.indexOf('>') + 1,
+                lecturerDiv[0].innerHTML.lastIndexOf('<'));
+            var lecturer = {name: name, about:about};
+
             var auditorium = days[j].parentNode.parentNode.parentNode.parentNode
                 .getElementsByClassName('auditorium')[0].textContent.trim();
-            var school = days[j].parentNode.parentNode.parentNode.parentNode
-                .getElementsByClassName('schedule-line__school')[0].textContent.trim();
-
-            var newDate = { date: date, auditorium: auditorium, school: school };
-            loadByDate.push(newDate);
+            var schools = days[j].parentNode.parentNode.parentNode.parentNode
+                .getElementsByClassName('school');
+            var school = '';
+            for (var k = 0; k < schools.length; k++) {
+                school += schools[k].textContent.trim() + ',';
+            }
+            school = school.slice(0, -1);
+            var newDate = { date: date, title: title, lecturer: lecturer, auditorium: auditorium, school: school };
+            schedule.push(newDate);
         }
     }
 }
@@ -174,13 +185,13 @@ function sortTables(scheduleMonth) {
 }
 
 function checkLecture(datetime, auditorium, schoolName) {
-    for (var i = 0; i < loadByDate.length; i++) {
+    for (var i = 0; i < schedule.length; i++) {
         // ms to hours
-        var diffHours = (datetime - loadByDate[i].date) / 36e5;
+        var diffHours = (datetime - schedule[i].date) / 36e5;
 
         // if two lectures in one auditorium at the same time
         // or if two lectures for one school at the same time
-        if ((diffHours > -2.5 && diffHours < 2.5) && (loadByDate[i].auditorium.indexOf(auditorium) !== -1 || loadByDate[i].school.indexOf(schoolName) !== -1)) {
+        if ((diffHours > -2.5 && diffHours < 2.5) && (schedule[i].auditorium.indexOf(auditorium) !== -1 || schedule[i].school.indexOf(schoolName) !== -1)) {
             return false;
         }
     }
@@ -310,7 +321,7 @@ function addLecture(datetime, title, lecturer, auditorium, schoolName) {
 
     // add new lecture to auditoriums load
     var newLoad = { date: datetime, auditorium: auditorium, school: schoolName };
-    loadByDate.push(newLoad);
+    schedule.push(newLoad);
 }
 
 function sortMonths() {

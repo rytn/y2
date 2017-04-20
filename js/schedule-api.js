@@ -319,9 +319,10 @@ function addLecture(datetime, title, lecturer, auditorium, schoolName) {
         sortMonths();
     }
 
-    // add new lecture to auditoriums load
-    var newLoad = { date: datetime, auditorium: auditorium, school: schoolName };
-    schedule.push(newLoad);
+    // add new lecture to schedule array
+    var newLecture = {date: datetime, title: title, lecturer: {name: lecturer.name, about: lecturer.about},
+        auditorium: auditorium, school: school};
+    schedule.push(newLecture);
 }
 
 function sortMonths() {

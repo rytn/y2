@@ -185,20 +185,25 @@ function sortTables(scheduleMonth) {
 }
 
 function checkLecture(datetime, auditorium, school, lecturer) {
-    for (var i = 0; i < schedule.length; i++) {
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+    if (lectures === null) {
+        return true;
+    }
+
+    for (var i = 0; i < lectures.length; i++) {
         // ms to hours
-        var diffHours = (datetime - schedule[i].date) / 36e5;
+        var diffHours = (datetime - new Date(lectures[i].date)) / 36e5;
 
         // if two lectures in one auditorium at the same time
         // or if two lectures for one school
         // or if two lecturers for one lecture
-        if ((diffHours > -2.5 && diffHours < 2.5) && schedule[i].auditorium.indexOf(auditorium) !== -1) {
+        if ((diffHours > -2.5 && diffHours < 2.5) && lectures[i].auditorium.indexOf(auditorium) !== -1) {
             throw new Error('В этой аудитории уже идет лекция в это время.');
         }
-        if ((diffHours > -2.5 && diffHours < 2.5) && schedule[i].school.indexOf(school) !== -1) {
+        if ((diffHours > -2.5 && diffHours < 2.5) && lectures[i].school.indexOf(school) !== -1) {
             throw new Error('Для этой школы уже читается лекция в это время.');
         }
-        if ((diffHours > -2.5 && diffHours < 2.5) && schedule[i].lecturer.name.indexOf(lecturer) !== -1) {
+        if ((diffHours > -2.5 && diffHours < 2.5) && lectures[i].lecturer.name.indexOf(lecturer) !== -1) {
             throw new Error('Этот лектор уже читает лекцию в это время.');
         }
     }
@@ -241,7 +246,15 @@ function addLecture(datetime, title, lecturer, auditorium, school) {
         auditorium: auditorium, school: school};
     schedule.push(newLecture);
 
-    localStorage.setItem(datetime.getTime().toString() + auditorium, JSON.stringify(newLecture));
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+    if (lectures === null) {
+        lectures = [];
+    }
+    if (lectures.indexOf(newLecture)) {
+        lectures.push(newLecture);
+    }
+
+    localStorage.setItem('lectures', JSON.stringify(lectures));
 }
 
 function displayLecture(datetime, title, lecturer, auditorium, school) {

@@ -233,10 +233,19 @@ function getSchoolTip(school) {
 }
 
 function addLecture(datetime, title, lecturer, auditorium, school) {
-    var newMonth = false;
-
     checkLecture(datetime, auditorium, school, lecturer.name);
+    displayLecture(datetime, title, lecturer, auditorium, school);
 
+    // add new lecture to schedule array
+    var newLecture = {date: datetime, title: title, lecturer: {name: lecturer.name, about: lecturer.about},
+        auditorium: auditorium, school: school};
+    schedule.push(newLecture);
+
+    localStorage.setItem(datetime.getTime().toString() + auditorium, JSON.stringify(newLecture));
+}
+
+function displayLecture(datetime, title, lecturer, auditorium, school) {
+    var newMonth = false;
     var monthId = document.getElementById(MONTHSIDS[datetime.getMonth() + 1] + datetime.getFullYear());
 
     // if there is no such month create a new schedule-month element
@@ -319,13 +328,6 @@ function addLecture(datetime, title, lecturer, auditorium, school) {
     if (newMonth) {
         sortMonths();
     }
-
-    // add new lecture to schedule array
-    var newLecture = {date: datetime, title: title, lecturer: {name: lecturer.name, about: lecturer.about},
-        auditorium: auditorium, school: school};
-    schedule.push(newLecture);
-
-    localStorage.setItem(datetime.getTime().toString() + auditorium, JSON.stringify(newLecture));
 }
 
 function sortMonths() {

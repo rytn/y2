@@ -203,7 +203,8 @@
                 <select id="lectureSchool"></select>
                 <br>аудитория:
                 <br>
-                <select id="lectureAuditorium"></select>
+                <select id="lectureAuditorium" onchange="displayCapacity()"></select>
+                <br>вместимость: <span id="audCapacity"></span>
                 <br>
                 <input type="button" value="добавить" onclick="callAddLecture()">
             </form>
@@ -240,6 +241,14 @@
     updateAuditoriumsSelect('lectureAuditorium');
     updateSchoolsSelect();
     fillTimeSelect();
+
+    displayCapacity();
+
+    function displayCapacity() {
+        var aud = document.getElementById('lectureAuditorium');
+        var cap = document.getElementById('audCapacity');
+        cap.innerHTML = JSON.parse(localStorage.getItem('auditoriums'))[aud.options[aud.selectedIndex].value];
+    }
 
     function makeArrayByClassName(className) {
         var elements = document.getElementsByClassName(className);

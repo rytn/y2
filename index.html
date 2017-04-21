@@ -7,7 +7,7 @@
     <title>Расписание</title>
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/schedule-api.js"></script>
-    <script src="js/sampleLectures.js"></script>
+    <script src="js/samples.js"></script>
 </head>
 
 <body>
@@ -213,6 +213,14 @@
         </div>
     </div>
     <script>
+    if (localStorage.getItem('auditoriums') === null) {
+        localStorage.setItem('auditoriums', JSON.stringify(sampleAuditoriums));
+    }
+
+    if (localStorage.getItem('schools') === null) {
+        localStorage.setItem('schools', JSON.stringify(sampleSchools));
+    }
+
     if (localStorage.getItem('lectures') !== null) {
         var lectures = JSON.parse(localStorage.getItem('lectures'));
 

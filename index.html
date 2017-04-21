@@ -211,6 +211,14 @@
                 <br>
                 <input type="button" value="добавить" onclick="callAddLecture()">
             </form>
+            <form>
+                <strong>добавить школу</strong>
+                <br>название:<br>
+                <input id="newSchoolName" type="text">
+                <br>количество студентов:<br>
+                <input id="newSchoolStudents" type="number" min="1">
+                <input type="button" value="добавить" onclick="callAddSchool()">
+            </form>
         </div>
         <div id="schedule" class="schedule">
             <h1>Доклады</h1>
@@ -412,6 +420,14 @@
         var lecturer = {name: lecturerName, about: lecturerAbout};
 
         addLecture(datetime, title, lecturer, auditorium, school);
+    }
+
+    function callAddSchool() {
+        var name = document.getElementById('newSchoolName').value;
+        var studentsNumber = document.getElementById('newSchoolStudents').value;
+
+        addSchool(name, studentsNumber);
+        updateSchoolsSelect();
     }
     </script>
 </body>

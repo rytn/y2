@@ -398,3 +398,21 @@ function sortMonths() {
         schedule.appendChild(months[i]);
     }
 }
+
+function addSchool(name, studentsNumber) {
+    if (name === '' || studentsNumber === '') {
+        throw new Error('Заполните все поля.');
+    }
+
+    var schools = JSON.parse(localStorage.getItem('schools'));
+    if (schools === null) {
+        schools = {};
+    }
+
+    if (schools.hasOwnProperty(name)) {
+        throw new Error('Школа с таким именем уже есть.');
+    }
+
+    schools[name] = Number(studentsNumber);
+    localStorage.setItem('schools', JSON.stringify(schools));
+}

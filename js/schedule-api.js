@@ -319,10 +319,15 @@ function displayLecture(datetime, title, lecturer, auditorium, school) {
     tdAuditorium.appendChild(divATooltip);
 
     var tdSchool = createNewElement('td', 'schedule-line__school', '');
-    var divSTooltip = createNewElement('div', 'tooltip tooltip--left', school);
-    var spanSTooltip = createNewElement('span', 'tooltiptext', getSchoolTip(school));
-    divSTooltip.appendChild(spanSTooltip);
-    tdSchool.appendChild(divSTooltip);
+    var schools = school.split(',');
+    for (var i = 0; i < schools.length; i++) {
+        var divSTooltip = createNewElement('div', 'tooltip tooltip--left', '');
+        var divSchool = createNewElement('div', 'school', schools[i]);
+        var spanSTooltip = createNewElement('span', 'tooltiptext', getSchoolTip(schools[i]));
+        divSTooltip.appendChild(divSchool);
+        divSTooltip.appendChild(spanSTooltip);
+        tdSchool.appendChild(divSTooltip);
+    }
 
     tableLecture.appendChild(tbLecutre);
     tbLecutre.appendChild(trLecture);

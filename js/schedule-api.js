@@ -224,6 +224,14 @@ function checkCapacity(auditorium, school) {
     if (auditoriums[auditorium] < studentsNumber) {
         throw new Error('Нет места. В аудитории только ' + auditoriums[auditorium] + ' мест.');
     }
+
+    var auditoriumsLoad = JSON.parse(localStorage.getItem('auditoriumsLoad'));
+    if (auditoriumsLoad === null) {
+        auditoriumsLoad = {};
+    }
+
+    auditoriumsLoad[auditorium] = studentsNumber;
+    localStorage.setItem('auditoriumsLoad', JSON.stringify(auditoriumsLoad));
 }
 
 function createNewElement(tag, className, innerHtml) {

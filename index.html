@@ -200,7 +200,8 @@
                 <input id="lecturerAbout" type="text">
                 <br>школа:
                 <br>
-                <select id="lectureSchool"></select>
+                <select id="lectureSchool" onchange="displayStudentsNumber()"></select>
+                <br>студентов: <span id="schoolNumber"></span>
                 <br>аудитория:
                 <br>
                 <select id="lectureAuditorium" onchange="displayCapacity()"></select>
@@ -242,12 +243,19 @@
     updateSchoolsSelect();
     fillTimeSelect();
 
+    displayStudentsNumber();
     displayCapacity();
 
     function displayCapacity() {
         var aud = document.getElementById('lectureAuditorium');
         var cap = document.getElementById('audCapacity');
         cap.innerHTML = JSON.parse(localStorage.getItem('auditoriums'))[aud.options[aud.selectedIndex].value];
+    }
+
+    function displayStudentsNumber() {
+        var school = document.getElementById('lectureSchool');
+        var cap = document.getElementById('schoolNumber');
+        cap.innerHTML = JSON.parse(localStorage.getItem('schools'))[school.options[school.selectedIndex].value];
     }
 
     function makeArrayByClassName(className) {

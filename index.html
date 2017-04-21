@@ -286,16 +286,12 @@
 
     function updateAuditoriumsSelect(selectId) {
         var select = document.getElementById(selectId);
-        var auditoriumsArray = makeArrayByClassName('auditorium');
+        var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
 
         // clear select
         while (select.firstChild) {
             select.removeChild(select.firstChild);
         }
-
-        auditoriumsArray.sort(function(a, b) {
-            return a.localeCompare(b);
-        });
 
         if (selectId === 'auditoriumSelect') {
             var opt = document.createElement('option');
@@ -304,27 +300,30 @@
             select.appendChild(opt);
         }
 
-        // update select element with sorted auditoriums
-        for (var i = 0; i < auditoriumsArray.length; i++) {
-            var option = document.createElement('option');
-            option.value = auditoriumsArray[i];
-            option.innerHTML = auditoriumsArray[i];
-            select.appendChild(option);
+        for (auditorium in auditoriums) {
+            if (auditoriums.hasOwnProperty(auditorium)) {
+                var option = document.createElement('option');
+                option.value = auditorium;
+                option.innerHTML = auditorium;
+                select.appendChild(option);
+            }
         }
     }
 
     function updateSchoolsSelect() {
         var select = document.getElementById('lectureSchool');
-        var schoolsArray = makeArrayByClassName('school');
+        var schools = JSON.parse(localStorage.getItem('schools'));
 
         while (select.firstChild) {
             select.removeChild(select.firstChild);
         }
 
-        for (var i = 0; i < schoolsArray.length; i++) {
-            var option = document.createElement('option');
-            option.innerHTML = schoolsArray[i];
-            select.appendChild(option);
+        for (school in schools) {
+            if (schools.hasOwnProperty(school)) {
+                var option = document.createElement('option');
+                option.innerHTML = school;
+                select.appendChild(option);
+            }
         }
     }
 

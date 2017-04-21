@@ -457,3 +457,21 @@ function addAuditorium(name, capacity) {
     auditoriums[name] = Number(capacity);
     localStorage.setItem('auditoriums', JSON.stringify(auditoriums));
 }
+
+function updateLectures() {
+    var schedule = document.getElementById('schedule');
+    for (var i = schedule.children.length; i > 1; i--) {
+        schedule.removeChild(schedule.lastElementChild);
+    }
+
+    displayLectures();
+}
+
+function displayLectures() {
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+
+    for (var i = 0; i < lectures.length; i++) {
+        displayLecture(new Date(lectures[i].date), lectures[i].title, lectures[i].lecturer,
+            lectures[i].auditorium, lectures[i].school);
+    }
+}

@@ -246,12 +246,7 @@
     }
 
     if (localStorage.getItem('lectures') !== null) {
-        var lectures = JSON.parse(localStorage.getItem('lectures'));
-
-        for (var i = 0; i < lectures.length; i++) {
-            displayLecture(new Date(lectures[i].date), lectures[i].title, lectures[i].lecturer,
-                lectures[i].auditorium, lectures[i].school);
-        }
+        displayLectures();
     } else {
         for (var i = 0; i < sampleLectures.length; i++) {
             addLecture(new Date(sampleLectures[i].date), sampleLectures[i].title, sampleLectures[i].lecturer,

@@ -212,12 +212,13 @@ function checkLecture(datetime, auditorium, school, lecturer) {
 function checkCapacity(auditorium, school) {
     var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
     var schools = JSON.parse(localStorage.getItem('schools'));
+    var acronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
 
     var schoolNames = school.split(',');
     var studentsNumber = 0;
 
     for (var i = 0; i < schoolNames.length; i++) {
-        studentsNumber += schools[schoolNames[i]];
+        studentsNumber += schools[acronyms[schoolNames[i]]];
     }
 
     if (auditoriums[auditorium] < studentsNumber) {
@@ -337,10 +338,11 @@ function displayLecture(datetime, title, lecturer, auditorium, school) {
 
     var tdSchool = createNewElement('td', 'schedule-line__school', '');
     var schools = school.split(',');
+    var acronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
     for (var i = 0; i < schools.length; i++) {
         var divSTooltip = createNewElement('div', 'tooltip tooltip--left', '');
         var divSchool = createNewElement('div', 'school', schools[i]);
-        var spanSTooltip = createNewElement('span', 'tooltiptext', getSchoolTip(schools[i]));
+        var spanSTooltip = createNewElement('span', 'tooltiptext', acronyms[schools[i]]);
         divSTooltip.appendChild(divSchool);
         divSTooltip.appendChild(spanSTooltip);
         tdSchool.appendChild(divSTooltip);
@@ -405,14 +407,27 @@ function addSchool(name, studentsNumber) {
     }
 
     var schools = JSON.parse(localStorage.getItem('schools'));
+    var schoolsAcronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
     if (schools === null) {
         schools = {};
+    }
+    if (schoolsAcronyms === null) {
+        schoolsAcronyms = {};
     }
 
     if (schools.hasOwnProperty(name)) {
         throw new Error('Школа с таким именем уже есть.');
     }
 
+    // first letters of each word
+    var firstLetters = name.split(' ');
+    var acronym = '';
+    for (var i = 0; i < firstLetters.length; i++) {
+        acronym += firstLetters[i].substring(0,1).toUpperCase();
+    }
+
     schools[name] = Number(studentsNumber);
+    schoolsAcronyms[acronym] = name;
     localStorage.setItem('schools', JSON.stringify(schools));
+    localStorage.setItem('schoolsAcronyms', JSON.stringify((schoolsAcronyms)));
 }

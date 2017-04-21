@@ -233,6 +233,10 @@
         localStorage.setItem('schools', JSON.stringify(sampleSchools));
     }
 
+    if (localStorage.getItem('schoolsAcronyms') === null) {
+        localStorage.setItem('schoolsAcronyms', JSON.stringify(sampleSchoolsAcronyms));
+    }
+
     if (localStorage.getItem('lectures') !== null) {
         var lectures = JSON.parse(localStorage.getItem('lectures'));
 
@@ -271,8 +275,11 @@
             schoolsInput.value += ',' + schoolName;
         }
 
+        var schools = JSON.parse(localStorage.getItem('schools'));
+        var acronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
+
         document.getElementById('studentsNumber').innerHTML =
-            +document.getElementById('studentsNumber').innerHTML + JSON.parse(localStorage.getItem('schools'))[schoolName];
+            +document.getElementById('studentsNumber').innerHTML + schools[acronyms[schoolName]];
     }
 
     function displayCapacity() {
@@ -320,7 +327,7 @@
 
     function updateSchoolsSelect() {
         var select = document.getElementById('lectureSchool');
-        var schools = JSON.parse(localStorage.getItem('schools'));
+        var schools = JSON.parse(localStorage.getItem('schoolsAcronyms'));
 
         while (select.firstChild) {
             select.removeChild(select.firstChild);
@@ -427,6 +434,8 @@
         var studentsNumber = document.getElementById('newSchoolStudents').value;
 
         addSchool(name, studentsNumber);
+        document.getElementById('newSchoolName').value = '';
+        document.getElementById('newSchoolStudents').value = '';
         updateSchoolsSelect();
     }
     </script>

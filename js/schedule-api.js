@@ -13,7 +13,7 @@ var MONTHSNAMES = {
     "nov": "11",
     "dec": "12"
 };
-// for convertin month's ordinal number to word for schedule-month's id
+// for converting month's ordinal number to word for schedule-month's id
 var MONTHSIDS = {
     "1": "jan",
     "2": "feb",

@@ -198,10 +198,12 @@
                 <br>информация о лекторе:
                 <br>
                 <input id="lecturerAbout" type="text">
-                <br>школа:
+                <br>школы:<br>
+                <input id="schoolsInput" type="text" readonly="true">
+                <br>студентов: <span id="studentsNumber">0</span>
                 <br>
-                <select id="lectureSchool" onchange="displayStudentsNumber()"></select>
-                <br>студентов: <span id="schoolNumber"></span>
+                <select id="lectureSchool"></select>
+                <input type="button" value="добавить" onclick="addSchoolToInput()">
                 <br>аудитория:
                 <br>
                 <select id="lectureAuditorium" onchange="displayCapacity()"></select>
@@ -243,19 +245,32 @@
     updateSchoolsSelect();
     fillTimeSelect();
 
-    displayStudentsNumber();
     displayCapacity();
+
+    function addSchoolToInput() {
+        var schoolsInput = document.getElementById('schoolsInput');
+        var school = document.getElementById('lectureSchool');
+        var schoolName = school.options[document.getElementById('lectureSchool').selectedIndex].value;
+
+        if (schoolsInput.value.indexOf(schoolName) !== -1) {
+            alert('Школа уже добавлена');
+            return;
+        }
+
+        if (schoolsInput.value === '') {
+            schoolsInput.value += schoolName;
+        } else {
+            schoolsInput.value += ',' + schoolName;
+        }
+
+        document.getElementById('studentsNumber').innerHTML =
+            +document.getElementById('studentsNumber').innerHTML + JSON.parse(localStorage.getItem('schools'))[schoolName];
+    }
 
     function displayCapacity() {
         var aud = document.getElementById('lectureAuditorium');
         var cap = document.getElementById('audCapacity');
         cap.innerHTML = JSON.parse(localStorage.getItem('auditoriums'))[aud.options[aud.selectedIndex].value];
-    }
-
-    function displayStudentsNumber() {
-        var school = document.getElementById('lectureSchool');
-        var cap = document.getElementById('schoolNumber');
-        cap.innerHTML = JSON.parse(localStorage.getItem('schools'))[school.options[school.selectedIndex].value];
     }
 
     function makeArrayByClassName(className) {
@@ -390,8 +405,7 @@
         var title = document.getElementById('lectureTitle').value;
         var lecturerName = document.getElementById('lecturerName').value;
         var lecturerAbout = document.getElementById('lecturerAbout').value;
-        var school = document.getElementById('lectureSchool')
-            .options[document.getElementById('lectureSchool').selectedIndex].value;
+        var school = document.getElementById('schoolsInput').value;
         var auditorium = document.getElementById('lectureAuditorium')
             .options[document.getElementById('lectureAuditorium').selectedIndex].value;
 

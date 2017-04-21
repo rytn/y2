@@ -281,6 +281,14 @@ function addLecture(datetime, title, lecturer, auditorium, school) {
     }
 
     localStorage.setItem('lectures', JSON.stringify(lectures));
+    
+    var auditoriumsLoad = JSON.parse(localStorage.getItem('auditoriumsLoad'));
+    if (auditoriumsLoad === null) {
+        auditoriumsLoad = {};
+    }
+
+    auditoriumsLoad[auditorium + datetime.toString()] = studentsNumber;
+    localStorage.setItem('auditoriumsLoad', JSON.stringify(auditoriumsLoad));
 }
 
 function displayLecture(datetime, title, lecturer, auditorium, school) {

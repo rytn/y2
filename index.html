@@ -219,6 +219,14 @@
                 <input id="newSchoolStudents" type="number" min="1">
                 <input type="button" value="добавить" onclick="callAddSchool()">
             </form>
+            <form>
+                <strong>добавить аудиторию</strong>
+                <br>название:<br>
+                <input id="newAuditoriumName" type="text">
+                <br>вместимость:<br>
+                <input id="newAuditoriumCapacity" type="number" min="1">
+                <input type="button" value="добавить" onclick="callAddAuditorium()">
+            </form>
         </div>
         <div id="schedule" class="schedule">
             <h1>Доклады</h1>
@@ -437,6 +445,16 @@
         document.getElementById('newSchoolName').value = '';
         document.getElementById('newSchoolStudents').value = '';
         updateSchoolsSelect();
+    }
+
+    function callAddAuditorium() {
+        var name = document.getElementById('newAuditoriumName').value;
+        var capacity = document.getElementById('newAuditoriumCapacity').value;
+
+        addAuditorium(name, capacity);
+        document.getElementById('newAuditoriumName').value = '';
+        document.getElementById('newAuditoriumCapacity').value = '';
+        updateAuditoriumsSelect('lectureAuditorium')
     }
     </script>
 </body>

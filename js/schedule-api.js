@@ -431,3 +431,21 @@ function addSchool(name, studentsNumber) {
     localStorage.setItem('schools', JSON.stringify(schools));
     localStorage.setItem('schoolsAcronyms', JSON.stringify((schoolsAcronyms)));
 }
+
+function addAuditorium(name, capacity) {
+    if (name === '' || capacity === '') {
+        throw new Error('Заполните все поля.');
+    }
+
+    var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
+    if (auditoriums === null) {
+        auditoriums = {};
+    }
+
+    if (auditoriums.hasOwnProperty(name)) {
+        throw new Error('Аудитория с таким именем уже есть.');
+    }
+
+    auditoriums[name] = Number(capacity);
+    localStorage.setItem('auditoriums', JSON.stringify(auditoriums));
+}

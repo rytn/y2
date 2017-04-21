@@ -209,6 +209,22 @@ function checkLecture(datetime, auditorium, school, lecturer) {
     }
 }
 
+function checkCapacity(auditorium, school) {
+    var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
+    var schools = JSON.parse(localStorage.getItem('schools'));
+
+    var schoolNames = school.split(',');
+    var studentsNumber = 0;
+
+    for (var i = 0; i < schoolNames.length; i++) {
+        studentsNumber += schools[schoolNames[i]];
+    }
+
+    if (auditoriums[auditorium] < studentsNumber) {
+        throw new Error('Нет места. В аудитории только ' + auditoriums[auditorium] + ' мест.');
+    }
+}
+
 function createNewElement(tag, className, innerHtml) {
     var element = document.createElement(tag);
     element.className += ' ' + className;
@@ -238,6 +254,7 @@ function getSchoolTip(school) {
 }
 
 function addLecture(datetime, title, lecturer, auditorium, school) {
+    checkCapacity(auditorium, school);
     checkLecture(datetime, auditorium, school, lecturer.name);
     displayLecture(datetime, title, lecturer, auditorium, school);
 

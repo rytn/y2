@@ -203,7 +203,8 @@
                 <br>студентов: <span id="studentsNumber">0</span>
                 <br>
                 <select id="lectureSchool"></select>
-                <input type="button" value="добавить" onclick="addSchoolToInput()">
+                <input type="button" value="добавить" onclick="addSchoolToInput('schoolsInput', 'lectureSchool',
+                'studentsNumber')">
                 <br>аудитория:
                 <br>
                 <select id="lectureAuditorium" onchange="displayCapacity('lectureAuditorium', 'audCapacity')"></select>
@@ -294,10 +295,10 @@
     displayCapacity('auditoriumNameEdit', 'audCapacityEdit');
     displayStudentsEdit();
 
-    function addSchoolToInput() {
-        var schoolsInput = document.getElementById('schoolsInput');
-        var school = document.getElementById('lectureSchool');
-        var schoolName = school.options[document.getElementById('lectureSchool').selectedIndex].value;
+    function addSchoolToInput(inputId, selectId, numberId) {
+        var schoolsInput = document.getElementById(inputId);
+        var school = document.getElementById(selectId);
+        var schoolName = school.options[document.getElementById(selectId).selectedIndex].value;
 
         if (schoolsInput.value.indexOf(schoolName) !== -1) {
             alert('Школа уже добавлена');
@@ -313,8 +314,8 @@
         var schools = JSON.parse(localStorage.getItem('schools'));
         var acronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
 
-        document.getElementById('studentsNumber').innerHTML =
-            +document.getElementById('studentsNumber').innerHTML + schools[acronyms[schoolName]];
+        document.getElementById(numberId).innerHTML =
+            +document.getElementById(numberId).innerHTML + schools[acronyms[schoolName]];
     }
 
     function displayCapacity(selectId, capacityId) {

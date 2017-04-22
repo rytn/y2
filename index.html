@@ -234,6 +234,7 @@
                 <select onchange="displayEditForm(this)">
                     <option value="auditoriumEdit">аудитория</option>
                     <option value="schoolEdit">школа</option>
+                    <option value="lectureEdit">лекция</option>
                 </select>
                 <div id="auditoriumEdit">
                     <br>аудитория:<br>
@@ -254,6 +255,52 @@
                     <br>новое количество студентов:<br>
                     <input id="schoolNewNumber" type="number" min="1">
                     <input type="button" value="изменить" onclick="callEditSchool()">
+                </div>
+                <div id="lectureEdit" style="display: none;">
+                    <br>лекция:<br>
+                    <select id="lectureTitleEdit"></select>
+                    <br>новая дата:<br>
+                    <input id="newLectureDay" type="number" min="1" max="31">
+                    <select id="newLectureMonth">
+                        <option value="jan">январь</option>
+                        <option value="feb">февраль</option>
+                        <option value="mar">март</option>
+                        <option value="apr">апрель</option>
+                        <option value="may">май</option>
+                        <option value="jun">июнь</option>
+                        <option value="jul">июль</option>
+                        <option value="aug">август</option>
+                        <option value="sep">сентябрь</option>
+                        <option value="oct">октябрь</option>
+                        <option value="nov">ноябрь</option>
+                        <option value="dec">декабрь</option>
+                    </select>
+                    <select id="newLectureYear">
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                    </select>
+                    <br>новое время:<br>
+                    <input id="newLectureHour" type="number" min="1" max="23"> :
+                    <input id="newLectureMinute" type="number" min="1" max="59">
+                    <br>новое название:<br>
+                    <input id="newLectureTitle" type="text">
+                    <br>новый лектор:<br>
+                    <input id="newLecturerName" type="text">
+                    <br>информация о лекторе:<br>
+                    <input id="newLecturerAbout" type="text">
+                    <br>школы:<br>
+                    <input id="newSchoolsInput" type="text" readonly="true">
+                    <br>студентов: <span id="newStudentsNumberEdit">0</span>
+                    <br>
+                    <select id="lectureSchoolEdit"></select>
+                    <input type="button" value="добавить" onclick="addSchoolToInput('newSchoolsInput',
+                     'lectureSchoolEdit', 'newStudentsNumberEdit')">
+                    <br>аудитория:<br>
+                    <select id="lectureAuditoriumEdit" onchange="displayCapacity('lectureAuditoriumEdit', 'lectureAudCapacity')"></select>
+                    <br>вместимость: <span id="lectureAudCapacity"></span>
+                    <br>
+                    <input type="button" value="изменить">
                 </div>
             </form>
         </div>
@@ -294,6 +341,12 @@
     updateAuditoriumsSelect('auditoriumNameEdit');
     displayCapacity('auditoriumNameEdit', 'audCapacityEdit');
     displayStudentsEdit();
+
+    updateSchoolsSelect('lectureSchoolEdit');
+    updateAuditoriumsSelect('lectureAuditoriumEdit');
+    displayCapacity('lectureAuditoriumEdit', 'lectureAudCapacity');
+
+    updateLecturesSelect();
 
     function addSchoolToInput(inputId, selectId, numberId) {
         var schoolsInput = document.getElementById(inputId);
@@ -391,6 +444,17 @@
                 option.innerHTML = school;
                 select.appendChild(option);
             }
+        }
+    }
+
+    function updateLecturesSelect() {
+        var select = document.getElementById('lectureTitleEdit');
+        var lectures = JSON.parse(localStorage.getItem('lectures'));
+
+        for (var i = 0; i < lectures.length; i++) {
+            var option = document.createElement('option');
+            option.innerHTML = lectures[i].title;
+            select.appendChild(option);
         }
     }
 

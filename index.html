@@ -300,7 +300,7 @@
                     <select id="lectureAuditoriumEdit" onchange="displayCapacity('lectureAuditoriumEdit', 'lectureAudCapacity')"></select>
                     <br>вместимость: <span id="lectureAudCapacity"></span>
                     <br>
-                    <input type="button" value="изменить">
+                    <input type="button" value="изменить" onclick="callEditLecture()">
                 </div>
             </form>
         </div>
@@ -594,6 +594,32 @@
         document.getElementById('schoolNewNumber').value = '';
         updateSchoolsSelect('lectureSchool');
         updateSchoolsSelect('schoolNameEdit');
+        updateLectures();
+    }
+
+    function callEditLecture() {
+        var oldTitle = document.getElementById('lectureTitleEdit')
+            .options[document.getElementById('lectureTitleEdit').selectedIndex].value;
+
+        var day = document.getElementById('newLectureDay').value;
+        var month = document.getElementById('newLectureMonth')
+            .options[document.getElementById('newLectureMonth').selectedIndex].value;
+        var year = document.getElementById('newLectureYear')
+            .options[document.getElementById('newLectureYear').selectedIndex].value;
+        var hour = document.getElementById('newLectureHour').value;
+        var minute = document.getElementById('newLectureMinute').value;
+        var title = document.getElementById('newLectureTitle').value;
+        var lecturerName = document.getElementById('newLecturerName').value;
+        var lecturerAbout = document.getElementById('newLecturerAbout').value;
+        var school = document.getElementById('newSchoolsInput').value;
+        var auditorium = document.getElementById('lectureAuditoriumEdit')
+            .options[document.getElementById('lectureAuditoriumEdit').selectedIndex].value;
+
+        var datetime = new Date(year + '/' + month + '/' + day + ' ' + hour + ':' + minute);
+        var lecturer = {name: lecturerName, about: lecturerAbout};
+
+        editLecture(oldTitle, datetime, title, lecturer, auditorium, school);
+        updateLecturesSelect();
         updateLectures();
     }
     </script>

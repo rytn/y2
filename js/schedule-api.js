@@ -573,4 +573,42 @@ function editSchool(oldName, newName, newNumber) {
     localStorage.setItem('schools', JSON.stringify(schools));
     localStorage.setItem('schoolsAcronyms', JSON.stringify(acronyms));
     localStorage.setItem('lectures', JSON.stringify(lectures));
-} 
+}
+
+function editLecture(oldTitle, newDateTime, newTitle, newLecturer, newAuditorium, newSchool) {
+    if (oldTitle === '' || newDateTime === '' || newTitle === '' || newLecturer === '' || newAuditorium === '' || newSchool === '') {
+        throw new Error('Заполните все поля.');
+    }
+
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+    var oldLecture;
+
+    for (var i = 0; i < lectures.length; i++) {
+        if (lectures[i].title === oldTitle) {
+            // save old lecture
+            oldLecture = lectures[i];
+            // remove lecture from array and save to local storage for checking
+            lectures.splice(i, 1);
+            localStorage.setItem('lectures', JSON.stringify(lectures));
+            try {
+                addLecture(newDateTime, newTitle, newLecturer, newAuditorium, newSchool);
+            } catch(e) {
+                // if lecture does not pass checking return it to the schedule
+                lectures.push(oldLecture);
+                localStorage.setItem('lectures', JSON.stringify(lectures));
+                throw new Error(e.message);
+            }
+
+            // add new lecture
+            var newLecture = {};
+            newLecture.date = newDateTime;
+            newLecture.title = newTitle;
+            newLecture.lecturer = newLecturer;
+            newLecture.auditorium = newAuditorium;
+            newLecture.school = newSchool;
+            lectures.push(newLecture);
+        }
+    }
+
+    localStorage.setItem('lectures', JSON.stringify(lectures));
+}

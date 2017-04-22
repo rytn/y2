@@ -183,12 +183,9 @@ function callDisplayAuditoriumDateInterval() {
     var auditorium = document.getElementById('auditoriumSelect')
         .options[document.getElementById('auditoriumSelect').selectedIndex].value;
 
-    try {
-        displayAuditoriumDateInterval(auditorium, startDate, endDate);
-    } catch (e) {
-        alert(e.message);
-        return;
-    }
+    var lectures = getLecturesInInterval(startDate, endDate, auditorium);
+    clearLectures();
+    displayLectures(lectures);
 }
 
 function callAddLecture() {

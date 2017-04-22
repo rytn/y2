@@ -429,17 +429,23 @@ function addSchool(name, studentsNumber) {
         throw new Error('Школа с таким именем уже есть.');
     }
 
-    // first letters of each word
-    var firstLetters = name.split(' ');
-    var acronym = '';
-    for (var i = 0; i < firstLetters.length; i++) {
-        acronym += firstLetters[i].substring(0,1).toUpperCase();
-    }
+    var acronym = makeAcronym(name);
 
     schools[name] = Number(studentsNumber);
     schoolsAcronyms[acronym] = name;
     localStorage.setItem('schools', JSON.stringify(schools));
     localStorage.setItem('schoolsAcronyms', JSON.stringify((schoolsAcronyms)));
+}
+
+function makeAcronym(str) {
+    // first letters of each word
+    var firstWords = str.split(' ');
+    var acronym = '';
+    for (var i = 0; i < firstWords.length; i++) {
+        acronym += firstWords[i].substring(0,1).toUpperCase();
+    }
+
+    return acronym;
 }
 
 function addAuditorium(name, capacity) {
@@ -510,4 +516,61 @@ function editAuditorium(oldName, newName, newCapacity) {
     auditoriums[newName] = Number(newCapacity);
     localStorage.setItem('auditoriums', JSON.stringify(auditoriums));
     localStorage.setItem('lectures', JSON.stringify(lectures));
-}   
+}  
+
+function editSchool(oldName, newName, newNumber) {
+    if (oldName === '' || newName === '' || newNumber === '') {
+        throw new Error('Заполните все поля.');
+    }
+
+    var schools = JSON.parse(localStorage.getItem('schools'));
+    if (schools.hasOwnProperty(newName)) {
+        throw new Error('Школа с таким именем уже есть.');
+    }
+
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+    var auditoriumsLoad = JSON.parse(localStorage.getItem('auditoriumsLoad'));
+    var acronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
+    for (var i = 0; i < lectures.length; i++) {
+        if (lectures[i].school.indexOf(oldName) === -1) {
+            continue;
+        }
+
+        var schoolNames = lectures[i].school.split(',');
+        var studentsNumber = 0;
+        for (var j = 0; j < schoolNames.length; j++) {
+            studentsNumber += schools[acronyms[schoolNames[j]]];
+        }
+        studentsNumber -= schools[acronyms[oldName]];
+        var newStudentsNumber = studentsNumber + Number(newNumber);
+
+        if (new Date(lectures[i].date) > new Date()
+            && auditoriumsLoad[lectures[i].auditorium + new Date(lectures[i].date)] < newStudentsNumber) {
+            throw new Error('Новое количество студентов: ' + newNumber + '. Вместимость аудитории, в которой уже запланирована '
+                    + 'лекция для этой и других школ ' + auditoriumsLoad[lectures[i].auditorium + new Date(lectures[i].date)]
+                + ' человек. Поменяйте количетсво студентов или вместимость аудитории.');
+        }
+    }
+
+    var newAcronym = makeAcronym(newName);
+    for (var i = 0; i < lectures.length; i++) {
+        if (lectures[i].school.indexOf(oldName) !== -1) {
+            var schoolNames = lectures[i].school.split(',');
+            for (var j = 0; j < schoolNames.length; j++) {
+                if (schoolNames[j] === oldName) {
+                    schoolNames[j] = newAcronym;
+                }
+            }
+
+            lectures[i].school = schoolNames.join();
+        }
+    }
+
+    delete schools[acronyms[oldName]];
+    schools[newName] = Number(newNumber);
+    delete acronyms[oldName];
+    acronyms[newAcronym] = newName;
+    localStorage.setItem('schools', JSON.stringify(schools));
+    localStorage.setItem('schoolsAcronyms', JSON.stringify(acronyms));
+    localStorage.setItem('lectures', JSON.stringify(lectures));
+} 

@@ -252,7 +252,7 @@
                     <input id="schoolNewName" type="text">
                     <br>новое количество студентов:<br>
                     <input id="schoolNewNumber" type="number" min="1">
-                    <input type="button" value="изменить">
+                    <input type="button" value="изменить" onclick="callEditSchool()">
                 </div>
             </form>
         </div>
@@ -520,6 +520,20 @@
         updateAuditoriumsSelect('auditoriumNameEdit');
         displayCapacity();
         displayCapacityEdit();
+        updateLectures();
+    }
+
+    function callEditSchool() {
+        var oldName = document.getElementById('schoolNameEdit')
+            .options[document.getElementById('schoolNameEdit').selectedIndex].value;
+        var newName = document.getElementById('schoolNewName').value;
+        var newNumber = document.getElementById('schoolNewNumber').value;
+
+        editSchool(oldName, newName, newNumber);
+        document.getElementById('schoolNewName').value = '';
+        document.getElementById('schoolNewNumber').value = '';
+        updateSchoolsSelect('lectureSchool');
+        updateSchoolsSelect('schoolNameEdit');
         updateLectures();
     }
     </script>

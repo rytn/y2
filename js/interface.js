@@ -1,3 +1,50 @@
+// for converting words from schedule-month's ids to ordinal number of month
+var MONTHSNAMES = {
+    "jan": "1",
+    "feb": "2",
+    "mar": "3",
+    "apr": "4",
+    "may": "5",
+    "jun": "6",
+    "jul": "7",
+    "aug": "8",
+    "sep": "9",
+    "oct": "10",
+    "nov": "11",
+    "dec": "12"
+};
+// for converting month's ordinal number to word for schedule-month's id
+var MONTHSIDS = {
+    "1": "jan",
+    "2": "feb",
+    "3": "mar",
+    "4": "apr",
+    "5": "may",
+    "6": "jun",
+    "7": "jul",
+    "8": "aug",
+    "9": "sep",
+    "10": "oct",
+    "11": "nov",
+    "12": "dec"
+};
+// months in russian
+var MONTHSRUS = {
+    "1": "январь",
+    "2": "февраль",
+    "3": "март",
+    "4": "апрель",
+    "5": "май",
+    "6": "июнь",
+    "7": "июль",
+    "8": "август",
+    "9": "сентябрь",
+    "10": "октябрь",
+    "11": "ноябрь",
+    "12": "декабрь"
+};
+
+
 function addSchoolToInput(inputId, selectId, numberId) {
     var schoolsInput = document.getElementById(inputId);
     var school = document.getElementById(selectId);
@@ -357,4 +404,200 @@ function callEditLecture() {
 
     updateLecturesSelect();
     updateLectures();
+}
+
+function sortTables(scheduleMonth) {
+    var month = MONTHSNAMES[scheduleMonth.id.substring(0, 3)];
+    var year = scheduleMonth.id.substring(3);
+    var lectureTables = Array.prototype.slice.call(scheduleMonth.children, 1);
+
+    // sort lectures by date
+    lectureTables.sort(function(a, b) {
+        var day1 = a.getElementsByClassName('schedule-line__datetime__date')[0].textContent;
+        var hour1 = a.getElementsByClassName('schedule-line__datetime__time')[0].textContent;
+        var date1 = new Date(year + '/' + month + '/' + day1 + ' ' + hour1);
+        var day2 = b.getElementsByClassName('schedule-line__datetime__date')[0].textContent;
+        var hour2 = b.getElementsByClassName('schedule-line__datetime__time')[0].textContent;
+        var date2 = new Date(year + '/' + month + '/' + day2 + ' ' + hour2);
+
+        if (date1 > date2) {
+            return 1;
+        } else if (date2 > date1) {
+            return -1;
+        }
+
+        return 0;
+    });
+
+    // clear scheduleMonth
+    for (var i = scheduleMonth.children.length - 1; i > 0; i--) {
+        scheduleMonth.removeChild(scheduleMonth.lastElementChild);
+    }
+    // append sorted lectures to scheduleMonth
+    for (var i = 0; i < lectureTables.length; i++) {
+        scheduleMonth.appendChild(lectureTables[i]);
+    }
+}
+
+function createNewElement(tag, className, innerHtml) {
+    var element = document.createElement(tag);
+    element.className += ' ' + className;
+    element.innerHTML = innerHtml;
+
+    return element;
+}
+
+
+function plusZero(value) {
+    if (value < 10) {
+        return '0' + value;
+    } else {
+        return value;
+    }
+}
+
+function displayLecture(datetime, title, lecturer, auditorium, school) {
+    var newMonth = false;
+    var monthId = document.getElementById(MONTHSIDS[datetime.getMonth() + 1] + datetime.getFullYear());
+
+    // if there is no such month create a new schedule-month element
+    if (monthId === null) {
+        var divMonth = createNewElement('div', 'schedule-month', '');
+        divMonth.id = MONTHSIDS[datetime.getMonth() + 1] + datetime.getFullYear();
+
+        var divMonthHeading = createNewElement('div', 'schedule-month-heading', '');
+        var spanMonth = createNewElement('span', '', MONTHSRUS[datetime.getMonth() + 1] + ' ' + datetime.getFullYear());
+        divMonthHeading.appendChild(spanMonth);
+        divMonth.appendChild(divMonthHeading);
+
+        monthId = divMonth;
+        document.getElementById('schedule').appendChild(monthId);
+        newMonth = true;
+    }
+
+    // create new schedule-line
+    var tableLecture = createNewElement('table', 'schedule-line', '');
+    var tbLecutre = document.createElement('tbody');
+    var trLecture = document.createElement('tr');
+
+    var tdDateTime = createNewElement('td', 'schedule-line__datetime', '');
+    var spanDate = createNewElement('span', 'schedule-line__datetime__date', datetime.getDate());
+    var spanHour = createNewElement('span', 'schedule-line__datetime__time',
+        plusZero(datetime.getHours()) + ':' + plusZero(datetime.getMinutes()));
+    tdDateTime.appendChild(spanDate);
+    tdDateTime.appendChild(spanHour);
+    trLecture.appendChild(tdDateTime);
+
+    // if lecture is already past mark it
+    var lecture = createNewElement('td', 'schedule-line__lecture', '');
+    if (datetime < new Date()) {
+        lecture.className += ' schedule-line__lecture--past';
+    }
+    var divTitle = createNewElement('div', 'schedule-line__lecture__title', '');
+    if (datetime < new Date()) {
+        var aTitle = createNewElement('a', '', title);
+        aTitle.href = '#';
+        divTitle.appendChild(aTitle);
+    } else {
+        divTitle.innerHTML = title;
+    }
+    var divLecturer = createNewElement('div', 'schedule-line__lecturer', '');
+    var divTooltip = createNewElement('div', 'tooltip tooltip--right', lecturer.name);
+    var spanTooltip = createNewElement('span', 'tooltiptext', lecturer.about);
+    divTooltip.appendChild(spanTooltip);
+    divLecturer.appendChild(divTooltip);
+    lecture.appendChild(divTitle);
+    lecture.appendChild(divLecturer);
+
+    var auditoriumsAddresses = JSON.parse(localStorage.getItem('auditoriumsAddresses'));
+    var tdAuditorium = createNewElement('td', 'schedule-line__auditorium', '');
+    var divATooltip = createNewElement('div', 'tooltip tooltip--left', '');
+    var divA = createNewElement('div', 'auditorium', auditorium);
+    var spanATooltip = createNewElement('span', 'tooltiptext', auditoriumsAddresses[auditorium]);
+    divATooltip.appendChild(divA);
+    divATooltip.appendChild(spanATooltip);
+    tdAuditorium.appendChild(divATooltip);
+
+    var tdSchool = createNewElement('td', 'schedule-line__school', '');
+    var schools = school.split(',');
+    var acronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
+    for (var i = 0; i < schools.length; i++) {
+        var divSTooltip = createNewElement('div', 'tooltip tooltip--left', '');
+        var divSchool = createNewElement('div', 'school', schools[i]);
+        var spanSTooltip = createNewElement('span', 'tooltiptext', acronyms[schools[i]]);
+        divSTooltip.appendChild(divSchool);
+        divSTooltip.appendChild(spanSTooltip);
+        tdSchool.appendChild(divSTooltip);
+    }
+
+    tableLecture.appendChild(tbLecutre);
+    tbLecutre.appendChild(trLecture);
+    trLecture.appendChild(tdDateTime);
+    trLecture.appendChild(lecture);
+    trLecture.appendChild(tdAuditorium);
+    trLecture.appendChild(tdSchool);
+
+    // insert lecture at the end
+    monthId.appendChild(tableLecture);
+
+    // sort lectures by date after inserting
+    sortTables(monthId);
+
+    // if month is new sort months
+    if (newMonth) {
+        sortMonths();
+    }
+}
+
+function sortMonths() {
+    var months = Array.prototype.slice.call(document.getElementsByClassName('schedule-month'));
+
+    months.sort(function(a, b) {
+        var year1 = a.id.substring(3);
+        var month1 = MONTHSNAMES[a.id.substring(0, 3)];
+        var year2 = b.id.substring(3);
+        var month2 = MONTHSNAMES[b.id.substring(0, 3)];
+
+
+        var date1 = new Date(year1 + '/' + month1 + '/' + 1);
+        var date2 = new Date(year2 + '/' + month2 + '/' + 1);
+
+        if (date1 > date2) {
+            return 1;
+        } else if (date2 > date1) {
+            return -1;
+        }
+
+        return 0;
+    });
+
+    var schedule = document.getElementById('schedule');
+
+    // clear schedule
+    for (var i = schedule.children.length - 1; i > 0; i--) {
+        schedule.removeChild(schedule.lastElementChild);
+    }
+    // append sorted months to schedule
+    for (var i = 0; i < months.length; i++) {
+        schedule.appendChild(months[i]);
+    }
+}
+
+function updateLectures() {
+    clearLectures();
+    displayLectures(JSON.parse(localStorage.getItem('lectures')));
+}
+
+function clearLectures() {
+    var schedule = document.getElementById('schedule');
+    for (var i = schedule.children.length; i > 1; i--) {
+        schedule.removeChild(schedule.lastElementChild);
+    }
+}
+
+function displayLectures(lectures) {
+    for (var i = 0; i < lectures.length; i++) {
+        displayLecture(new Date(lectures[i].date), lectures[i].title, lectures[i].lecturer,
+            lectures[i].auditorium, lectures[i].school);
+    }
 }

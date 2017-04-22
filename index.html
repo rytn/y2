@@ -353,7 +353,6 @@
     displayCapacity('lectureAuditorium', 'audCapacity');
     updateAuditoriumsSelect('auditoriumNameEdit');
     displayCapacity('auditoriumNameEdit', 'audCapacityEdit');
-    displayStudentsEdit();
 
     updateSchoolsSelect('lectureSchoolEdit');
     updateAuditoriumsSelect('lectureAuditoriumEdit');
@@ -547,7 +546,12 @@
         var auditorium = document.getElementById('auditoriumSelect')
             .options[document.getElementById('auditoriumSelect').selectedIndex].value;
 
-        displayAuditoriumDateInterval(auditorium, startDate, endDate);
+        try {
+            displayAuditoriumDateInterval(auditorium, startDate, endDate);
+        } catch(e) {
+            alert(e.message);
+            return;
+        }
     }
 
     function callAddLecture() {
@@ -572,10 +576,16 @@
         var lecturer = {name: lecturerName, about: lecturerAbout};
 
         if (datetime === '' || title === '' || lecturer === '' || auditorium === '' || school === '') {
-            throw new Error('Заполните все поля.');
+            alert('Заполните все поля.');
+            return;
         }
 
-        addLecture(datetime, title, lecturer, auditorium, school);
+        try {
+            addLecture(datetime, title, lecturer, auditorium, school);
+        } catch(e) {
+            alert(e.message);
+            return;
+        }
     }
 
     function callAddSchool() {
@@ -583,10 +593,17 @@
         var studentsNumber = document.getElementById('newSchoolStudents').value;
 
         if (name === '' || studentsNumber === '') {
-            throw new Error('Заполните все поля.');
+            alert('Заполните все поля.');
+            return;
         }
 
-        addSchool(name, studentsNumber);
+        try {
+            addSchool(name, studentsNumber);
+        } catch(e) {
+            alert(e.message);
+            return;
+        }
+
         document.getElementById('newSchoolName').value = '';
         document.getElementById('newSchoolStudents').value = '';
         updateSchoolsSelect('lectureSchool');
@@ -599,10 +616,17 @@
         var capacity = document.getElementById('newAuditoriumCapacity').value;
 
         if (name === '' || address === '' || capacity === '') {
-            throw new Error('Заполните все поля.');
+            alert('Заполните все поля.');
+            return;
         }
 
-        addAuditorium(name, address, capacity);
+        try {
+            addAuditorium(name, address, capacity);
+        } catch(e) {
+            alert(e.message);
+            return;
+        }
+
         document.getElementById('newAuditoriumName').value = '';
         document.getElementById('newAuditoriumAddress').value = '';
         document.getElementById('newAuditoriumCapacity').value = '';
@@ -619,10 +643,17 @@
         var newCapacity = document.getElementById('auditoriumNewCapacity').value;
 
         if (oldName === '' || newName === '' || newAddress === '' || newCapacity === '') {
-            throw new Error('Заполните все поля.');
+            alert('Заполните все поля.');
+            return;
         }
 
-        editAuditorium(oldName, newName, newAddress, newCapacity);
+        try {
+            editAuditorium(oldName, newName, newAddress, newCapacity);
+        } catch(e) {
+            alert(e.message);
+            return;
+        }
+
         document.getElementById('auditoriumNewName').value = '';
         document.getElementById('auditoriumNewAddress').value = '';
         document.getElementById('auditoriumNewCapacity').value = '';
@@ -639,10 +670,17 @@
         var newNumber = document.getElementById('schoolNewNumber').value;
 
         if (oldName === '' || newName === '' || newNumber === '') {
-            throw new Error('Заполните все поля.');
+            alert('Заполните все поля.');
+            return;
         }
 
-        editSchool(oldName, newName, newNumber);
+        try {
+            editSchool(oldName, newName, newNumber);
+        } catch(e) {
+            alert(e.message);
+            return;
+        }
+
         document.getElementById('schoolNewName').value = '';
         document.getElementById('schoolNewNumber').value = '';
         updateSchoolsSelect('lectureSchool');
@@ -672,10 +710,17 @@
         var lecturer = {name: lecturerName, about: lecturerAbout};
 
         if (oldTitle === '' || datetime === '' || title === '' || lecturer === '' || auditorium === '' || school === '') {
-            throw new Error('Заполните все поля.');
+            alert('Заполните все поля.');
+            return;
         }
 
-        editLecture(oldTitle, datetime, title, lecturer, auditorium, school);
+        try {
+            editLecture(oldTitle, datetime, title, lecturer, auditorium, school);
+        } catch(e) {
+            alert(e.message);
+            return;
+        }
+
         updateLecturesSelect();
         updateLectures();
     }

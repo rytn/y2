@@ -492,7 +492,8 @@
         addSchool(name, studentsNumber);
         document.getElementById('newSchoolName').value = '';
         document.getElementById('newSchoolStudents').value = '';
-        updateSchoolsSelect();
+        updateSchoolsSelect('lectureSchool');
+        updateSchoolsSelect('schoolNameEdit');
     }
 
     function callAddAuditorium() {

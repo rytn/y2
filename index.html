@@ -206,7 +206,7 @@
                 <input type="button" value="добавить" onclick="addSchoolToInput()">
                 <br>аудитория:
                 <br>
-                <select id="lectureAuditorium" onchange="displayCapacity()"></select>
+                <select id="lectureAuditorium" onchange="displayCapacity('lectureAuditorium', 'audCapacity')"></select>
                 <br>вместимость: <span id="audCapacity"></span>
                 <br>
                 <input type="button" value="добавить" onclick="callAddLecture()">
@@ -236,7 +236,7 @@
                 </select>
                 <div id="auditoriumEdit">
                     <br>аудитория:<br>
-                    <select id="auditoriumNameEdit" onchange="displayCapacityEdit()"></select>
+                    <select id="auditoriumNameEdit" onchange="displayCapacity('auditoriumNameEdit', 'audCapacityEdit')"></select>
                     <br>вместимость: <span id="audCapacityEdit"></span>
                     <br>новое название:<br>
                     <input id="auditoriumNewName" type="text">
@@ -289,9 +289,9 @@
     updateSchoolsSelect('schoolNameEdit');
     fillTimeSelect();
 
-    displayCapacity();
+    displayCapacity('lectureAuditorium', 'audCapacity');
     updateAuditoriumsSelect('auditoriumNameEdit');
-    displayCapacityEdit();
+    displayCapacity('auditoriumNameEdit', 'audCapacityEdit');
     displayStudentsEdit();
 
     function addSchoolToInput() {
@@ -317,14 +317,9 @@
             +document.getElementById('studentsNumber').innerHTML + schools[acronyms[schoolName]];
     }
 
-    function displayCapacity() {
-        var aud = document.getElementById('lectureAuditorium');
-        var cap = document.getElementById('audCapacity');
-        cap.innerHTML = JSON.parse(localStorage.getItem('auditoriums'))[aud.options[aud.selectedIndex].value];
-    }
-    function displayCapacityEdit() {
-        var aud = document.getElementById('auditoriumNameEdit');
-        var cap = document.getElementById('audCapacityEdit');
+    function displayCapacity(selectId, capacityId) {
+        var aud = document.getElementById(selectId);
+        var cap = document.getElementById(capacityId);
         cap.innerHTML = JSON.parse(localStorage.getItem('auditoriums'))[aud.options[aud.selectedIndex].value];
     }
 

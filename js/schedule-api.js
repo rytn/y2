@@ -338,10 +338,11 @@ function displayLecture(datetime, title, lecturer, auditorium, school) {
     lecture.appendChild(divTitle);
     lecture.appendChild(divLecturer);
 
+    var auditoriumsAddresses = JSON.parse(localStorage.getItem('auditoriumsAddresses'));
     var tdAuditorium = createNewElement('td', 'schedule-line__auditorium', '');
     var divATooltip = createNewElement('div', 'tooltip tooltip--left', '');
     var divA = createNewElement('div', 'auditorium', auditorium);
-    var spanATooltip = createNewElement('span', 'tooltiptext', 'Аудитория');
+    var spanATooltip = createNewElement('span', 'tooltiptext', auditoriumsAddresses[auditorium]);
     divATooltip.appendChild(divA);
     divATooltip.appendChild(spanATooltip);
     tdAuditorium.appendChild(divATooltip);
@@ -448,14 +449,18 @@ function makeAcronym(str) {
     return acronym;
 }
 
-function addAuditorium(name, capacity) {
-    if (name === '' || capacity === '') {
+function addAuditorium(name, address, capacity) {
+    if (name === '' || address === '' || capacity === '') {
         throw new Error('Заполните все поля.');
     }
 
     var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
     if (auditoriums === null) {
         auditoriums = {};
+    }
+    var auditoriumsAddresses = JSON.parse(localStorage.getItem('auditoriumsAddresses'));
+    if (auditoriumsAddresses === null) {
+        auditoriumsAddresses = {};
     }
 
     if (auditoriums.hasOwnProperty(name)) {
@@ -464,6 +469,8 @@ function addAuditorium(name, capacity) {
 
     auditoriums[name] = Number(capacity);
     localStorage.setItem('auditoriums', JSON.stringify(auditoriums));
+    auditoriumsAddresses[name] = address;
+    localStorage.setItem('auditoriumsAddresses', JSON.stringify(auditoriumsAddresses));
 }
 
 function updateLectures() {
@@ -484,8 +491,8 @@ function displayLectures() {
     }
 }
 
-function editAuditorium(oldName, newName, newCapacity) {
-    if (oldName === '' || newName === '' || newCapacity === '') {
+function editAuditorium(oldName, newName, newAddress, newCapacity) {
+    if (oldName === '' || newName === '' || newAddress === '' || newCapacity === '') {
         throw new Error('Заполните все поля.');
     }
 
@@ -507,7 +514,7 @@ function editAuditorium(oldName, newName, newCapacity) {
     }
 
     for (var i = 0; i < lectures.length; i++) {
-        if (new Date(lectures[i].date) > new Date() && lectures[i].auditorium === oldName) {
+        if (lectures[i].auditorium === oldName) {
             lectures[i].auditorium = newName;
         }
     }
@@ -516,6 +523,10 @@ function editAuditorium(oldName, newName, newCapacity) {
     auditoriums[newName] = Number(newCapacity);
     localStorage.setItem('auditoriums', JSON.stringify(auditoriums));
     localStorage.setItem('lectures', JSON.stringify(lectures));
+    var auditoriumsAddresses = JSON.parse(localStorage.getItem('auditoriumsAddresses'));
+    delete auditoriumsAddresses[oldName];
+    auditoriumsAddresses[newName] = newAddress;
+    localStorage.setItem('auditoriumsAddresses', JSON.stringify(auditoriumsAddresses));
 }  
 
 function editSchool(oldName, newName, newNumber) {

@@ -44,44 +44,6 @@ var MONTHSRUS = {
     "12": "декабрь"
 };
 
-var schedule = [];
-
-function gatherDates() {
-    var months = document.getElementsByClassName('schedule-month');
-
-    for (var i = 0; i < months.length; i++) {
-        var month = months[i].id.substring(0, 3);
-        var year = months[i].id.substring(3);
-        var days = months[i].getElementsByClassName('schedule-line__datetime__date');
-        var hours = months[i].getElementsByClassName('schedule-line__datetime__time');
-
-        for (var j = 0; j < days.length; j++) {
-            var day = days[j].textContent;
-            var hour = hours[j].textContent;
-            var date = new Date(year + '/' + month + '/' + day + ' ' + hour);
-            var title = months[i].getElementsByClassName('schedule-line__lecture__title')[j].textContent.trim();
-
-            var lecturerDiv = months[i].getElementsByClassName('tooltip tooltip--right');
-            var name = lecturerDiv[0].innerHTML.substring(0, lecturerDiv[0].innerHTML.indexOf('<')).trim();
-            var about = lecturerDiv[0].innerHTML.substring(lecturerDiv[0].innerHTML.indexOf('>') + 1,
-                lecturerDiv[0].innerHTML.lastIndexOf('<'));
-            var lecturer = {name: name, about:about};
-
-            var auditorium = days[j].parentNode.parentNode.parentNode.parentNode
-                .getElementsByClassName('auditorium')[0].textContent.trim();
-            var schools = days[j].parentNode.parentNode.parentNode.parentNode
-                .getElementsByClassName('school');
-            var school = '';
-            for (var k = 0; k < schools.length; k++) {
-                school += schools[k].textContent.trim() + ',';
-            }
-            school = school.slice(0, -1);
-            var newDate = { date: date, title: title, lecturer: lecturer, auditorium: auditorium, school: school };
-            schedule.push(newDate);
-        }
-    }
-}
-
 function DateIntervalError(message) {
     this.name = 'DateIntervalError';
     this.message = message || 'Неправильный интервал дат';
@@ -245,17 +207,6 @@ function plusZero(value) {
     }
 }
 
-function getSchoolTip(school) {
-    if (school === 'ШРИ') {
-        return 'Школа разработки интерфейсов';
-    } else if (school === 'ШМР') {
-        return 'Школа мобильной разработки';
-    } else if (school === 'ШМД') {
-        return 'Школа мобильного дизайна';
-    }
-    return 'Школа';
-}
-
 function addLecture(datetime, title, lecturer, auditorium, school) {
     var studentsNumber = checkCapacity(auditorium, school);
     checkLecture(datetime, auditorium, school, lecturer.name);
@@ -264,7 +215,6 @@ function addLecture(datetime, title, lecturer, auditorium, school) {
     // add new lecture to schedule array
     var newLecture = {date: datetime, title: title, lecturer: {name: lecturer.name, about: lecturer.about},
         auditorium: auditorium, school: school};
-    schedule.push(newLecture);
 
     var lectures = JSON.parse(localStorage.getItem('lectures'));
     if (lectures === null) {

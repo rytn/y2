@@ -227,6 +227,23 @@
                 <input id="newAuditoriumCapacity" type="number" min="1">
                 <input type="button" value="добавить" onclick="callAddAuditorium()">
             </form>
+            <form id="editForms">
+                <strong>редактирование</strong>
+                <br>
+                <select onchange="displayEditForm(this)">
+                    <option value="auditoriumEdit">аудитория</option>
+                </select>
+                <div id="auditoriumEdit">
+                    <br>аудитория:<br>
+                    <select id="auditoriumNameEdit" onchange="displayCapacityEdit()"></select>
+                    <br>вместимость: <span id="audCapacityEdit"></span>
+                    <br>новое название:<br>
+                    <input id="auditoriumNewName" type="text">
+                    <br>новая вместимость:<br>
+                    <input id="auditoriumNewCapacity" type="number" min="1">
+                    <input type="button" value="изменить" onclick="callEditAuditorium()">
+                </div>
+            </form>
         </div>
         <div id="schedule" class="schedule">
             <h1>Доклады</h1>
@@ -261,6 +278,8 @@
     fillTimeSelect();
 
     displayCapacity();
+    updateAuditoriumsSelect('auditoriumNameEdit');
+    displayCapacityEdit();
 
     function addSchoolToInput() {
         var schoolsInput = document.getElementById('schoolsInput');
@@ -288,6 +307,11 @@
     function displayCapacity() {
         var aud = document.getElementById('lectureAuditorium');
         var cap = document.getElementById('audCapacity');
+        cap.innerHTML = JSON.parse(localStorage.getItem('auditoriums'))[aud.options[aud.selectedIndex].value];
+    }
+    function displayCapacityEdit() {
+        var aud = document.getElementById('auditoriumNameEdit');
+        var cap = document.getElementById('audCapacityEdit');
         cap.innerHTML = JSON.parse(localStorage.getItem('auditoriums'))[aud.options[aud.selectedIndex].value];
     }
 
@@ -450,6 +474,23 @@
         document.getElementById('newAuditoriumName').value = '';
         document.getElementById('newAuditoriumCapacity').value = '';
         updateAuditoriumsSelect('lectureAuditorium')
+    }
+
+    function callEditAuditorium() {
+        var oldName = document.getElementById('auditoriumNameEdit')
+            .options[document.getElementById('auditoriumNameEdit').selectedIndex].value;
+        var newName = document.getElementById('auditoriumNewName').value;
+        var newCapacity = document.getElementById('auditoriumNewCapacity').value;
+
+        editAuditorium(oldName, newName, newCapacity);
+        document.getElementById('auditoriumNewName').value = '';
+        document.getElementById('auditoriumNewCapacity').value = '';
+        updateAuditoriumsSelect('auditoriumSelect');
+        updateAuditoriumsSelect('lectureAuditorium');
+        updateAuditoriumsSelect('auditoriumNameEdit');
+        displayCapacity();
+        displayCapacityEdit();
+        updateLectures();
     }
     </script>
 </body>

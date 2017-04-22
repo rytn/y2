@@ -225,13 +225,7 @@ function checkCapacity(auditorium, school) {
         throw new Error('Нет места. В аудитории только ' + auditoriums[auditorium] + ' мест.');
     }
 
-    var auditoriumsLoad = JSON.parse(localStorage.getItem('auditoriumsLoad'));
-    if (auditoriumsLoad === null) {
-        auditoriumsLoad = {};
-    }
-
-    auditoriumsLoad[auditorium] = studentsNumber;
-    localStorage.setItem('auditoriumsLoad', JSON.stringify(auditoriumsLoad));
+    return studentsNumber;
 }
 
 function createNewElement(tag, className, innerHtml) {
@@ -263,7 +257,7 @@ function getSchoolTip(school) {
 }
 
 function addLecture(datetime, title, lecturer, auditorium, school) {
-    checkCapacity(auditorium, school);
+    var studentsNumber = checkCapacity(auditorium, school);
     checkLecture(datetime, auditorium, school, lecturer.name);
     displayLecture(datetime, title, lecturer, auditorium, school);
 
@@ -281,7 +275,7 @@ function addLecture(datetime, title, lecturer, auditorium, school) {
     }
 
     localStorage.setItem('lectures', JSON.stringify(lectures));
-    
+
     var auditoriumsLoad = JSON.parse(localStorage.getItem('auditoriumsLoad'));
     if (auditoriumsLoad === null) {
         auditoriumsLoad = {};
@@ -483,3 +477,37 @@ function displayLectures() {
             lectures[i].auditorium, lectures[i].school);
     }
 }
+
+function editAuditorium(oldName, newName, newCapacity) {
+    if (oldName === '' || newName === '' || newCapacity === '') {
+        throw new Error('Заполните все поля.');
+    }
+
+    var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
+    if (auditoriums.hasOwnProperty(newName)) {
+        throw new Error('Аудитория с таким именем уже есть.');
+    }
+
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+    var auditoriumsLoad = JSON.parse(localStorage.getItem('auditoriumsLoad'));
+    for (var i = 0; i < lectures.length; i++) {
+        if (lectures[i].auditorium !== oldName) {
+            continue;
+        }
+        if (new Date(lectures[i].date) > new Date() && auditoriumsLoad[oldName + new Date(lectures[i].date)] > newCapacity) {
+            throw new Error('Новая вместимость: ' + newCapacity + '. Но в этой аудитории уже запланирована лекция для '
+                + auditoriumsLoad[oldName + new Date(lectures[i].date)] + ' человек. Поменяйте вместимость.');
+        }
+    }
+
+    for (var i = 0; i < lectures.length; i++) {
+        if (new Date(lectures[i].date) > new Date() && lectures[i].auditorium === oldName) {
+            lectures[i].auditorium = newName;
+        }
+    }
+
+    delete auditoriums[oldName];
+    auditoriums[newName] = Number(newCapacity);
+    localStorage.setItem('auditoriums', JSON.stringify(auditoriums));
+    localStorage.setItem('lectures', JSON.stringify(lectures));
+}   

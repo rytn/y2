@@ -232,6 +232,7 @@
                 <br>
                 <select onchange="displayEditForm(this)">
                     <option value="auditoriumEdit">аудитория</option>
+                    <option value="schoolEdit">школа</option>
                 </select>
                 <div id="auditoriumEdit">
                     <br>аудитория:<br>
@@ -242,6 +243,16 @@
                     <br>новая вместимость:<br>
                     <input id="auditoriumNewCapacity" type="number" min="1">
                     <input type="button" value="изменить" onclick="callEditAuditorium()">
+                </div>
+                <div id="schoolEdit" style="display: none;">
+                    <br>школа:<br>
+                    <select id="schoolNameEdit" onchange="displayStudentsEdit()"></select>
+                    <br>студентов: <span id="studentsNumberEdit"></span>
+                    <br>новое название:<br>
+                    <input id="schoolNewName" type="text">
+                    <br>новое количество студентов:<br>
+                    <input id="schoolNewNumber" type="number" min="1">
+                    <input type="button" value="изменить">
                 </div>
             </form>
         </div>
@@ -274,12 +285,14 @@
     gatherDates();
     updateAuditoriumsSelect('auditoriumSelect');
     updateAuditoriumsSelect('lectureAuditorium');
-    updateSchoolsSelect();
+    updateSchoolsSelect('lectureSchool');
+    updateSchoolsSelect('schoolNameEdit');
     fillTimeSelect();
 
     displayCapacity();
     updateAuditoriumsSelect('auditoriumNameEdit');
     displayCapacityEdit();
+    displayStudentsEdit();
 
     function addSchoolToInput() {
         var schoolsInput = document.getElementById('schoolsInput');
@@ -313,6 +326,22 @@
         var aud = document.getElementById('auditoriumNameEdit');
         var cap = document.getElementById('audCapacityEdit');
         cap.innerHTML = JSON.parse(localStorage.getItem('auditoriums'))[aud.options[aud.selectedIndex].value];
+    }
+
+    function displayStudentsEdit() {
+        var select = document.getElementById('schoolNameEdit');
+        var students = document.getElementById('studentsNumberEdit');
+        var acronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
+        students.innerHTML = JSON.parse(localStorage.getItem('schools'))[acronyms[select.options[select.selectedIndex].value]];
+    }
+
+    function displayEditForm(select) {
+        var editFormToDisplay = document.getElementById(select.value);
+        var editForms = document.getElementById('editForms').getElementsByTagName('div');
+        for (var i = 0; i < editForms.length; i++) {
+            editForms[i].style.display = 'none';
+        }
+        editFormToDisplay.style.display = '';
     }
 
     function makeArrayByClassName(className) {
@@ -352,8 +381,8 @@
         }
     }
 
-    function updateSchoolsSelect() {
-        var select = document.getElementById('lectureSchool');
+    function updateSchoolsSelect(selectId) {
+        var select = document.getElementById(selectId);
         var schools = JSON.parse(localStorage.getItem('schoolsAcronyms'));
 
         while (select.firstChild) {

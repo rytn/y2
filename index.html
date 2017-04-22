@@ -205,6 +205,9 @@
                 <select id="lectureSchool"></select>
                 <input type="button" value="добавить" onclick="addSchoolToInput('schoolsInput', 'lectureSchool',
                 'studentsNumber')">
+                <br>
+                <input type="button" value="удалить последнюю" onclick="removeLastSchoolFromInput('schoolsInput',
+                'studentsNumber')">
                 <br>аудитория:
                 <br>
                 <select id="lectureAuditorium" onchange="displayCapacity('lectureAuditorium', 'audCapacity')"></select>
@@ -296,6 +299,9 @@
                     <select id="lectureSchoolEdit"></select>
                     <input type="button" value="добавить" onclick="addSchoolToInput('newSchoolsInput',
                      'lectureSchoolEdit', 'newStudentsNumberEdit')">
+                     <br>
+                    <input type="button" value="удалить последнюю" onclick="removeLastSchoolFromInput('newSchoolsInput',
+                    'newStudentsNumberEdit')">
                     <br>аудитория:<br>
                     <select id="lectureAuditoriumEdit" onchange="displayCapacity('lectureAuditoriumEdit', 'lectureAudCapacity')"></select>
                     <br>вместимость: <span id="lectureAudCapacity"></span>
@@ -369,6 +375,22 @@
 
         document.getElementById(numberId).innerHTML =
             +document.getElementById(numberId).innerHTML + schools[acronyms[schoolName]];
+    }
+
+    function removeLastSchoolFromInput(inputId, numberId) {
+        var schoolsInput = document.getElementById(inputId);
+
+        var lastSchool = schoolsInput.value.substring(schoolsInput.value.lastIndexOf(',') + 1).trim();
+
+        document.getElementById(inputId).value = schoolsInput.value.substring(0, schoolsInput.value.lastIndexOf(','));
+
+        var schools = JSON.parse(localStorage.getItem('schools'));
+        var acronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
+
+        var oldNumber = Number(document.getElementById(numberId).innerHTML);
+        var newNumber = oldNumber - schools[acronyms[lastSchool]];
+
+        document.getElementById(numberId).innerHTML = newNumber;
     }
 
     function displayCapacity(selectId, capacityId) {

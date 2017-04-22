@@ -571,12 +571,20 @@
         var datetime = new Date(year + '/' + month + '/' + day + ' ' + hour + ':' + minute);
         var lecturer = {name: lecturerName, about: lecturerAbout};
 
+        if (datetime === '' || title === '' || lecturer === '' || auditorium === '' || school === '') {
+            throw new Error('Заполните все поля.');
+        }
+
         addLecture(datetime, title, lecturer, auditorium, school);
     }
 
     function callAddSchool() {
         var name = document.getElementById('newSchoolName').value;
         var studentsNumber = document.getElementById('newSchoolStudents').value;
+
+        if (name === '' || studentsNumber === '') {
+            throw new Error('Заполните все поля.');
+        }
 
         addSchool(name, studentsNumber);
         document.getElementById('newSchoolName').value = '';
@@ -589,6 +597,10 @@
         var name = document.getElementById('newAuditoriumName').value;
         var address = document.getElementById('newAuditoriumAddress').value;
         var capacity = document.getElementById('newAuditoriumCapacity').value;
+
+        if (name === '' || address === '' || capacity === '') {
+            throw new Error('Заполните все поля.');
+        }
 
         addAuditorium(name, address, capacity);
         document.getElementById('newAuditoriumName').value = '';
@@ -606,6 +618,10 @@
         var newAddress = document.getElementById('auditoriumNewAddress').value;
         var newCapacity = document.getElementById('auditoriumNewCapacity').value;
 
+        if (oldName === '' || newName === '' || newAddress === '' || newCapacity === '') {
+            throw new Error('Заполните все поля.');
+        }
+
         editAuditorium(oldName, newName, newAddress, newCapacity);
         document.getElementById('auditoriumNewName').value = '';
         document.getElementById('auditoriumNewAddress').value = '';
@@ -621,6 +637,10 @@
             .options[document.getElementById('schoolNameEdit').selectedIndex].value;
         var newName = document.getElementById('schoolNewName').value;
         var newNumber = document.getElementById('schoolNewNumber').value;
+
+        if (oldName === '' || newName === '' || newNumber === '') {
+            throw new Error('Заполните все поля.');
+        }
 
         editSchool(oldName, newName, newNumber);
         document.getElementById('schoolNewName').value = '';
@@ -650,6 +670,10 @@
 
         var datetime = new Date(year + '/' + month + '/' + day + ' ' + hour + ':' + minute);
         var lecturer = {name: lecturerName, about: lecturerAbout};
+
+        if (oldTitle === '' || datetime === '' || title === '' || lecturer === '' || auditorium === '' || school === '') {
+            throw new Error('Заполните все поля.');
+        }
 
         editLecture(oldTitle, datetime, title, lecturer, auditorium, school);
         updateLecturesSelect();

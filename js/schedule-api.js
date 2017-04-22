@@ -363,10 +363,6 @@ function sortMonths() {
 }
 
 function addSchool(name, studentsNumber) {
-    if (name === '' || studentsNumber === '') {
-        throw new Error('Заполните все поля.');
-    }
-
     var schools = JSON.parse(localStorage.getItem('schools'));
     var schoolsAcronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
     if (schools === null) {
@@ -400,10 +396,6 @@ function makeAcronym(str) {
 }
 
 function addAuditorium(name, address, capacity) {
-    if (name === '' || address === '' || capacity === '') {
-        throw new Error('Заполните все поля.');
-    }
-
     var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
     if (auditoriums === null) {
         auditoriums = {};
@@ -442,10 +434,6 @@ function displayLectures() {
 }
 
 function editAuditorium(oldName, newName, newAddress, newCapacity) {
-    if (oldName === '' || newName === '' || newAddress === '' || newCapacity === '') {
-        throw new Error('Заполните все поля.');
-    }
-
     var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
     if (auditoriums.hasOwnProperty(newName)) {
         throw new Error('Аудитория с таким именем уже есть.');
@@ -480,10 +468,6 @@ function editAuditorium(oldName, newName, newAddress, newCapacity) {
 }  
 
 function editSchool(oldName, newName, newNumber) {
-    if (oldName === '' || newName === '' || newNumber === '') {
-        throw new Error('Заполните все поля.');
-    }
-
     var schools = JSON.parse(localStorage.getItem('schools'));
     if (schools.hasOwnProperty(newName)) {
         throw new Error('Школа с таким именем уже есть.');
@@ -537,10 +521,6 @@ function editSchool(oldName, newName, newNumber) {
 }
 
 function editLecture(oldTitle, newDateTime, newTitle, newLecturer, newAuditorium, newSchool) {
-    if (oldTitle === '' || newDateTime === '' || newTitle === '' || newLecturer === '' || newAuditorium === '' || newSchool === '') {
-        throw new Error('Заполните все поля.');
-    }
-
     var lectures = JSON.parse(localStorage.getItem('lectures'));
     var oldLecture;
 

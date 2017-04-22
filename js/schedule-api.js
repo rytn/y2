@@ -416,17 +416,18 @@ function addAuditorium(name, address, capacity) {
 }
 
 function updateLectures() {
+    clearLectures();
+    displayLectures(JSON.parse(localStorage.getItem('lectures')));
+}
+
+function clearLectures() {
     var schedule = document.getElementById('schedule');
     for (var i = schedule.children.length; i > 1; i--) {
         schedule.removeChild(schedule.lastElementChild);
     }
-
-    displayLectures();
 }
 
-function displayLectures() {
-    var lectures = JSON.parse(localStorage.getItem('lectures'));
-
+function displayLectures(lectures) {
     for (var i = 0; i < lectures.length; i++) {
         displayLecture(new Date(lectures[i].date), lectures[i].title, lectures[i].lecturer,
             lectures[i].auditorium, lectures[i].school);

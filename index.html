@@ -337,7 +337,7 @@
     }
 
     if (localStorage.getItem('lectures') !== null) {
-        displayLectures();
+        displayLectures(JSON.parse(localStorage.getItem('lectures')));
     } else {
         for (var i = 0; i < sampleLectures.length; i++) {
             addLecture(new Date(sampleLectures[i].date), sampleLectures[i].title, sampleLectures[i].lecturer,

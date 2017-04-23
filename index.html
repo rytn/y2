@@ -15,8 +15,9 @@
         <div class="edit-interface">
             <form>
                 <strong>расписание в заданный интервал</strong>
-                <br> аудитория
-                <br>
+                <br>школа:<br>
+                <select id="schoolSelect"></select>
+                <br> аудитория:<br>
                 <select id="auditoriumSelect"></select>
                 <br> начало:
                 <br>
@@ -345,6 +346,7 @@
         }
     }
 
+    updateSchoolsSelect('schoolSelect');
     updateAuditoriumsSelect('auditoriumSelect');
     updateAuditoriumsSelect('lectureAuditorium');
     updateSchoolsSelect('lectureSchool');

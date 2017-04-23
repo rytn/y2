@@ -150,6 +150,13 @@ function updateSchoolsSelect(selectId) {
         select.removeChild(select.firstChild);
     }
 
+    if (selectId === 'schoolSelect') {
+        var opt = document.createElement('option');
+        opt.value = 'любая';
+        opt.innerHTML = 'любая';
+        select.appendChild(opt);
+    }
+
     for (school in schools) {
         if (schools.hasOwnProperty(school)) {
             var option = document.createElement('option');
@@ -229,14 +236,17 @@ function callDisplayAuditoriumDateInterval() {
     var endDate = new Date(dates['yearEnd'] + '/' + dates['monthEnd'] + '/' + dates['dayEnd']);
     var auditorium = document.getElementById('auditoriumSelect')
         .options[document.getElementById('auditoriumSelect').selectedIndex].value;
+    var school = document.getElementById('schoolSelect')
+        .options[document.getElementById('schoolSelect').selectedIndex].value;
 
-    var lectures = getLecturesInInterval(startDate, endDate, auditorium);
+    var lectures = getLecturesInInterval(startDate, endDate, auditorium, school);
     clearLectures();
     displayLectures(lectures);
 }
 
 function callAddLecture() {
-    var day = document.getElementById('lectureDay')
+    var day =
+        document.getElementById('lectureDay')
         .options[document.getElementById('lectureDay').selectedIndex].value;
     var month = document.getElementById('lectureMonth')
         .options[document.getElementById('lectureMonth').selectedIndex].value;
@@ -267,6 +277,8 @@ function callAddLecture() {
         alert(e.message);
         return;
     }
+
+    displayLecture(datetime, title, lecturer, auditorium, school);
 }
 
 function callAddSchool() {

@@ -2,19 +2,32 @@ function isBetweenDates(date, min, max) {
     return date >= min && date <= max;
 }
 
-function getLecturesInInterval(startDate, endDate, auditorium) {
+function getLecturesInInterval(startDate, endDate, auditorium, school) {
     var lectures = JSON.parse(localStorage.getItem('lectures'));
     var lecturesToDisplay = [];
 
-    if (auditorium === 'любая') {
+    if (auditorium === 'любая' && school === 'любая') {
         for (var i = 0; i < lectures.length; i++) {
             if (isBetweenDates(new Date(lectures[i].date), startDate, endDate)) {
                 lecturesToDisplay.push(lectures[i]);
             }
         }
-    } else {
+    } else if (auditorium !== 'любая' && school !== 'любая') {
+        for (var i = 0; i < lectures.length; i++) {
+            if (isBetweenDates(new Date(lectures[i].date), startDate, endDate)
+            && lectures[i].auditorium === auditorium && lectures[i].school.indexOf(school) !== -1) {
+                lecturesToDisplay.push(lectures[i]);
+            }
+        }
+    } else if (auditorium !== 'любая' && school === 'любая') {
         for (var i = 0; i < lectures.length; i++) {
             if (isBetweenDates(new Date(lectures[i].date), startDate, endDate) && lectures[i].auditorium === auditorium) {
+                lecturesToDisplay.push(lectures[i]);
+            }
+        }
+    } else if (auditorium === 'любая' && school !== 'любая') {
+        for (var i = 0; i < lectures.length; i++) {
+            if (isBetweenDates(new Date(lectures[i].date), startDate, endDate) && lectures[i].school.indexOf(school) !== -1) {
                 lecturesToDisplay.push(lectures[i]);
             }
         }
@@ -70,7 +83,6 @@ function checkCapacity(auditorium, school) {
 function addLecture(datetime, title, lecturer, auditorium, school) {
     var studentsNumber = checkCapacity(auditorium, school);
     checkLecture(datetime, auditorium, school, lecturer.name);
-    displayLecture(datetime, title, lecturer, auditorium, school);
 
     // add new lecture to schedule array
     var newLecture = {date: datetime, title: title, lecturer: {name: lecturer.name, about: lecturer.about},

@@ -295,3 +295,19 @@ function removeAuditorium(auditorium) {
     delete auditoriums[auditorium];
     localStorage.setItem('auditoriums', JSON.stringify(auditoriums));
 }
+
+function removeSchool(school) {
+    var schools = JSON.parse(localStorage.getItem('schools'));
+    var schoolsAcronyms = JSON.parse(localStorage.getItem('schoolsAcronyms'));
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+    
+    // check if lectures are planned for this school
+    for (var i = 0; i < lectures.length; i++) {
+        if (new Date(lectures[i].date) > new Date() && lectures[i].school.indexOf(school) !== -1) {
+            throw new Error('Нельзя удалить школу, потому то для нее уже запланирована лекция');
+        }
+    }
+    
+    delete schools[schoolsAcronyms[school]];
+    localStorage.setItem('schools', JSON.stringify(schools));
+}

@@ -622,7 +622,12 @@ function callRemoveAuditorium() {
     var auditorium = document.getElementById('auditoriumNameEdit')
         .options[document.getElementById('auditoriumNameEdit').selectedIndex].value;
 
-    removeAuditorium(auditorium);
+    try {    
+        removeAuditorium(auditorium);
+    } catch(e) {
+        alert(e.message);
+    }
+    
     updateAuditoriumsSelect('auditoriumNameEdit');
     updateAuditoriumsSelect('auditoriumSelect');
     updateAuditoriumsSelect('lectureAuditorium');
@@ -630,4 +635,13 @@ function callRemoveAuditorium() {
     displayCapacity('lectureAuditorium', 'audCapacity');
     displayCapacity('auditoriumNameEdit', 'audCapacityEdit');
     displayCapacity('lectureAuditoriumEdit', 'lectureAudCapacity');
+}
+
+function callRemoveLecture() {
+    var lecture = document.getElementById('lectureTitleEdit')
+        .options[document.getElementById('lectureTitleEdit').selectedIndex].value;
+
+    removeLecture(lecture);
+    updateLecturesSelect();
+    updateLectures();
 }

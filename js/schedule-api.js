@@ -320,3 +320,19 @@ function removeSchool(school) {
     delete schools[schoolsAcronyms[school]];
     localStorage.setItem('schools', JSON.stringify(schools));
 }
+
+function removeLecture(lecture) {
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+    var auditoriumsLoad = JSON.parse(localStorage.getItem('auditoriumsLoad'));
+
+    for (var i = 0; i < lectures.length; i++) {
+        if (lectures[i].title === lecture) {
+            delete auditoriumsLoad[lectures[i].auditorium + new Date(lectures[i].date).toString()];
+            localStorage.setItem('auditoriumsLoad', JSON.stringify(auditoriumsLoad));
+
+            lectures.splice(i, 1);
+        }
+    }
+
+    localStorage.setItem('lectures', JSON.stringify(lectures));
+}

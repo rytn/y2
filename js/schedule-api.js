@@ -248,7 +248,12 @@ function editSchool(oldName, newName, newNumber) {
 }
 
 function editLecture(oldTitle, newDateTime, newTitle, newLecturer, newAuditorium, newSchool) {
+    if (oldTitle === '' || newDateTime === '' || newTitle === '' || newLecturer === '' || newAuditorium === '' || newSchool === '') {
+        throw new Error('Заполните все поля.');
+    }
+
     var lectures = JSON.parse(localStorage.getItem('lectures'));
+    var auditoriumsLoad = JSON.parse(localStorage.getItem('auditoriumsLoad'));
     var oldLecture;
 
     for (var i = 0; i < lectures.length; i++) {
@@ -260,6 +265,10 @@ function editLecture(oldTitle, newDateTime, newTitle, newLecturer, newAuditorium
             localStorage.setItem('lectures', JSON.stringify(lectures));
             try {
                 addLecture(newDateTime, newTitle, newLecturer, newAuditorium, newSchool);
+                
+                delete auditoriumsLoad[oldLecture.auditorium + new Date(oldLecture.date).toString()];
+                auditoriumsLoad[newAuditorium + newDateTime.toString()] = checkCapacity(newAuditorium, newSchool);
+                localStorage.setItem('auditoriumsLoad', JSON.stringify(auditoriumsLoad));
             } catch(e) {
                 // if lecture does not pass checking return it to the schedule
                 lectures.push(oldLecture);

@@ -613,3 +613,17 @@ function displayLectures(lectures) {
             lectures[i].auditorium, lectures[i].school);
     }
 }
+
+function callRemoveAuditorium() {
+    var auditorium = document.getElementById('auditoriumNameEdit')
+        .options[document.getElementById('auditoriumNameEdit').selectedIndex].value;
+
+    removeAuditorium(auditorium);
+    updateAuditoriumsSelect('auditoriumNameEdit');
+    updateAuditoriumsSelect('auditoriumSelect');
+    updateAuditoriumsSelect('lectureAuditorium');
+    updateAuditoriumsSelect('lectureAuditoriumEdit');
+    displayCapacity('lectureAuditorium', 'audCapacity');
+    displayCapacity('auditoriumNameEdit', 'audCapacityEdit');
+    displayCapacity('lectureAuditoriumEdit', 'lectureAudCapacity');
+}

@@ -280,3 +280,18 @@ function editLecture(oldTitle, newDateTime, newTitle, newLecturer, newAuditorium
 
     localStorage.setItem('lectures', JSON.stringify(lectures));
 }
+
+function removeAuditorium(auditorium) {
+    var auditoriums = JSON.parse(localStorage.getItem('auditoriums'));
+    var lectures = JSON.parse(localStorage.getItem('lectures'));
+
+    // check if lectures are planned in this auditorium
+    for (var i = 0; i < lectures.length; i++) {
+        if (new Date(lectures[i].date) > new Date() && lectures[i].auditorium === auditorium) {
+            throw new Error('Нельзя удалить аудиторию, потому то в ней уже запланирована лекция');
+        }
+    }
+
+    delete auditoriums[auditorium];
+    localStorage.setItem('auditoriums', JSON.stringify(auditoriums));
+}

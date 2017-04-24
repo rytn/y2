@@ -345,6 +345,7 @@
             addLecture(new Date(sampleLectures[i].date), sampleLectures[i].title, sampleLectures[i].lecturer,
                 sampleLectures[i].auditorium, sampleLectures[i].school);
         }
+        displayLectures(JSON.parse(localStorage.getItem('lectures')));
     }
 
     updateSchoolsSelect('schoolSelect');

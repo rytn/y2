@@ -170,6 +170,10 @@ function updateLecturesSelect() {
     var select = document.getElementById('lectureTitleEdit');
     var lectures = JSON.parse(localStorage.getItem('lectures'));
 
+    while (select.firstChild) {
+        select.removeChild(select.firstChild);
+    }
+
     for (var i = 0; i < lectures.length; i++) {
         var option = document.createElement('option');
         option.innerHTML = lectures[i].title;
